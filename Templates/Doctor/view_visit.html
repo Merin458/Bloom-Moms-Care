@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visit Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+{% include 'Doctor/header.html' %}
+
+<div class="container mt-5">
+    <h3 class="mb-4">Visit Details</h3>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <span class="label">Patient Name:</span>
+                    <p>{{ visit.patient_id.patient_name }}</p>
+                </div>
+                <div class="col-md-6">
+                    <span class="label">Visit Date:</span>
+                    <p>{{ visit.visit_date }}</p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <span class="label">Weight:</span>
+                    <p>{{ visit.weight }} kg</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="label">Blood Pressure:</span>
+                    <p>{{ visit.blood_pressure }}</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="label">Health Status:</span>
+                    <p>{{ visit.health_status }}</p>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <span class="label">Visit Details:</span>
+                <p class="mt-2">{{ visit.details }}</p>
+            </div>
+
+            <div class="mb-3">
+                <span class="label">Next Visit Date:</span>
+                <p>{{ visit.next_visit_date }}</p>
+            </div>
+
+            <div class="text-end">
+                <a href="{% url 'doctorapp:doctor_visits' %}" class="btn btn-secondary">
+                    Back to Visits
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% include 'Doctor/Footer.html' %}
+
+</body>
+</html>

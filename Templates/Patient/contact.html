@@ -1,0 +1,90 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Contact Us</h1>
+        <p class="fs-5">
+            We are here to support you at every stage of your motherhood journey.
+        </p>
+    </div>
+</div>
+
+<!-- Contact Information Section -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- Contact Details -->
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-4 shadow-sm h-100">
+                    <h3 class="mb-4">Get in Touch</h3>
+
+                    <p>
+                        For appointments, medical inquiries, or emergency support,
+                        please feel free to contact us through the details below.
+                    </p>
+
+                    <hr>
+
+                    <p><strong>📍 Address:</strong><br>
+                    Bloom Moms Care,<br>
+                    Main Medical Road,<br>
+                    Your City, India</p>
+
+                    <p><strong>📞 Phone:</strong><br>
+                    +91 98765 43210</p>
+
+                    <p><strong>📧 Email:</strong><br>
+                    support@bloommomscare.com</p>
+
+                    <p><strong>🕒 Working Hours:</strong><br>
+                    Monday – Saturday: 9:00 AM – 6:00 PM</p>
+
+                    <p><strong>🚨 Emergency Support:</strong><br>
+                    Available 24/7 for maternity emergencies</p>
+                </div>
+            </div>
+
+            <!-- Quick Action Section -->
+            <div class="col-lg-6">
+                <div class="bg-light rounded p-4 shadow-sm h-100 text-center">
+                    <h3 class="mb-4">Need Immediate Assistance?</h3>
+
+                    <p>
+                        Schedule an appointment with our experienced doctors
+                        for consultation and maternal care support.
+                    </p>
+
+                    <a href="{% url 'patientapp:appointmentbooking' %}" 
+                       class="btn btn-primary px-4 py-2 mt-3">
+                       Book Appointment
+                    </a>
+
+                    <div class="mt-4 p-4 bg-white rounded shadow-sm">
+    <h5 class="mb-3 text-primary">Why Contact Bloom Moms Care?</h5>
+    <p>
+        Our team is dedicated to providing compassionate and 
+        professional maternal healthcare support. Whether you 
+        need guidance, consultation, or emergency assistance, 
+        we are always ready to help.
+    </p>
+</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

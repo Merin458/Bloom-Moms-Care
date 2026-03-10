@@ -1,0 +1,84 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        {% include 'Admin/messages.html' %}
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="font-weight-bold mb-0">Doctor Leave List</h3>
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">← Back</a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-11 grid-margin stretch-card">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">Leave Records</h4>
+                    <p class="card-description">
+                        View doctor leave entries date-wise (default: today)
+                    </p>
+
+                    <form method="GET" class="mb-4">
+                        <div class="form-row align-items-end">
+                            <div class="col-md-4">
+                                <label for="leaveDateFilter">Leave Date</label>
+                                <input type="date" id="leaveDateFilter" name="leave_date" class="form-control" value="{{ selected_date }}">
+                            </div>
+                            <div class="col-md-4 mt-3 mt-md-0">
+                                <button type="submit" class="btn btn-primary mr-2">Filter</button>
+                                <a href="{% url 'adminapp:viewdoctorleave' %}" class="btn btn-light">Today</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Doctor Name</th>
+                                    <th>Leave Date</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% if leaves %}
+
+                                    {% for l in leaves %}
+                                    <tr>
+                                        <td>{{ l.doctor.doctor_name }}</td>
+                                        <td>{{ l.leave_date }}</td>
+                                        <td>{{ l.reason }}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">
+                                            No leave records found
+                                        </td>
+                                    </tr>
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    
+    {% include 'Admin/footer.html' %}
+</div>

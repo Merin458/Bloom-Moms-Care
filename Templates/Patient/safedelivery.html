@@ -1,0 +1,75 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Safe Delivery & Postnatal Care</h1>
+        <p class="fs-5">
+            Ensuring a safe childbirth experience and complete care after delivery.
+        </p>
+    </div>
+</div>
+
+<!-- Service Details Section -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+
+            <!-- Image Section -->
+            <div class="col-lg-6">
+                <img src="{% static 'Patient/img/service-6.jpg' %}" 
+                     class="img-fluid rounded shadow" 
+                     alt="Safe Delivery & Postnatal Care">
+            </div>
+
+            <!-- Content Section -->
+            <div class="col-lg-6">
+                <h3 class="mb-4">Complete Care for Mother & Baby</h3>
+
+                <p>
+                    We provide comprehensive support during labor and delivery, 
+                    ensuring safety for both mother and newborn. Our team follows 
+                    medical best practices to ensure a smooth childbirth process.
+                </p>
+
+                <ul class="list-unstyled">
+                    <li>✔ Normal & Assisted Delivery Support</li>
+                    <li>✔ Emergency Care Preparedness</li>
+                    <li>✔ Post-Delivery Health Monitoring</li>
+                    <li>✔ Newborn Health Assessment</li>
+                    <li>✔ Breastfeeding & Recovery Guidance</li>
+                </ul>
+
+                <p class="mt-3">
+                    Postnatal care is equally important. We monitor the mother’s 
+                    recovery, provide emotional support, and ensure the baby’s 
+                    healthy development during the initial weeks after birth.
+                </p>
+
+                <!-- Buttons -->
+                <div class="mt-4">
+                    <a href="{% url 'patientapp:appointmentbooking' %}" 
+                       class="btn btn-primary px-4 py-2 me-2">
+                       Schedule Delivery Consultation
+                    </a>
+
+                    
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

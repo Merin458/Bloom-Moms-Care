@@ -1,0 +1,122 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    {% include 'Admin/messages.html' %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="font-weight-bold mb-0">Edit Patient</h3>
+      <a href="javascript:history.back()" class="btn btn-secondary btn-sm">← Back</a>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Edit Patient</h4>
+            <p class="card-description">Update Patient Details</p>
+
+            <form action="" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Patient Name</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="patientname" value="{{ pat.patient_name }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Consulting Doctor</label>
+                <div class="col-sm-9">
+                  <select class="form-control" name="ddldoctor" required>
+                    <option value="">-- Select Doctor --</option>
+                    {% for d in doc %}
+                      <option value="{{ d.doctor_id }}" {% if pat.doctor_id and pat.doctor_id.doctor_id == d.doctor_id %}selected{% endif %}>
+                        {{ d.doctor_name }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Age</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="age" value="{{ pat.age }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input type="email" class="form-control" name="pemail" value="{{ pat.login_id.user_name }}" readonly>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Contact Number</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="contact" value="{{ pat.phone }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Address</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="address" value="{{ pat.address }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Current Image</label>
+                <div class="col-sm-9">
+                  {% if pat.image %}
+                    <img src="{{ pat.image.url }}" width="100" height="100" class="mb-2" alt="{{ pat.patient_name }}">
+                  {% else %}
+                    <p>No image</p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Change Image</label>
+                <div class="col-sm-9">
+                  <input type="file" class="form-control" name="pimage">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Blood Group</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="bgroup" value="{{ pat.blood_group }}">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Last Cycle Date</label>
+                <div class="col-sm-9">
+                  <input type="date" class="form-control" name="lcd" value="{{ pat.last_cycle_date|date:'Y-m-d' }}">
+                  <small class="form-text text-muted">Expected delivery date will be auto-calculated (LCD + 280 days)</small>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Current Expected Delivery Date</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" value="{{ pat.edd_date|date:'Y-m-d' }}" disabled>
+                  <small class="form-text text-muted">Auto-calculated based on Last Cycle Date</small>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary mr-2">Update</button>
+              <a href="{% url 'adminapp:viewpatients' %}" class="btn btn-light">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'Admin/footer.html' %}
+</div>

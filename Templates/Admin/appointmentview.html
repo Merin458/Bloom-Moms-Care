@@ -1,0 +1,113 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        {% include 'Admin/messages.html' %}
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="font-weight-bold mb-0">Appointment Requests</h3>
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">← Back</a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-11 grid-margin stretch-card">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">Appointments</h4>
+                    <p class="card-description">
+                        Manage patient appointment requests
+                    </p>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for a in appointments %}
+                                <tr>
+
+                                    <td>{{ a.patient_id.patient_name }}</td>
+
+                                    <td>{{ a.doctor_id.doctor_name }}</td>
+
+                                    <td>{{ a.appointment_date }}</td>
+
+                                    <td>{{ a.appointment_time }}</td>
+
+                                    <td>
+                                        {% if a.status == 'Pending' %}
+                                            <span class="badge badge-warning">Pending</span>
+
+                                        {% elif a.status == 'Accepted' %}
+                                            <span class="badge badge-success">Accepted</span>
+
+                                        {% elif a.status == 'Rescheduled' %}
+                                            <span class="badge badge-info">Rescheduled</span>
+
+                                        {% else %}
+                                            <span class="badge badge-secondary">{{ a.status }}</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+
+                                        {% if a.status == 'Pending' %}
+
+                                            <a href="{% url 'adminapp:accept_appointment' a.appointment_id %}"
+                                               class="btn btn-success btn-sm">
+                                                Accept
+                                            </a>
+
+                                            <a href="{% url 'adminapp:reschedule_appointment' a.appointment_id %}"
+                                               class="btn btn-warning btn-sm">
+                                                Reschedule
+                                            </a>
+
+                                        {% elif a.status == 'Accepted' %}
+
+                                            <span class="text-success font-weight-bold">
+                                                Accepted
+                                            </span>
+
+                                        {% elif a.status == 'Rescheduled' %}
+
+                                            <span class="text-warning font-weight-bold">
+                                                Rescheduled
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    
+    {% include 'Admin/footer.html' %}
+</div>

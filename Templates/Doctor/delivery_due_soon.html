@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Due Soon - Bloom Moms Care</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #36b9cc;
+            --light-bg: #e3f2fd;
+            --dark-text: #333;
+            --warning-color: #ff9800;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Clinical Navbar */
+        .clinical-navbar {
+            background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .clinical-navbar .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .clinical-navbar .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .clinical-navbar .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .clinical-navbar .btn-logout {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+        }
+        
+        .clinical-navbar .btn-logout:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .page-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Patient Card */
+        .patient-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .patient-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.3rem;
+        }
+        
+        .patient-id {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .due-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .due-badge.urgent {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .due-badge.soon {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+        
+        .due-badge.upcoming {
+            background-color: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #555;
+        }
+        
+        .info-item i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+        
+        .info-item strong {
+            color: var(--dark-text);
+            margin-right: 0.3rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+        }
+        
+        .empty-state {
+            background: white;
+            border-radius: 12px;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h4 {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state p {
+            color: #999;
+        }
+        
+        .back-button {
+            margin-bottom: 1rem;
+        }
+        
+        .back-button a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Clinical Navbar -->
+    <nav class="navbar navbar-expand-lg clinical-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'doctorapp:doctorindex' %}">
+                <i class="fas fa-heartbeat me-2"></i>Bloom Moms Care
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctorindex' %}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctor_patients' %}">
+                            <i class="fas fa-users me-1"></i>Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctor_appointments_by_date' %}">
+                            <i class="fas fa-calendar-alt me-1"></i>Appointments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctor_patients' %}">
+                            <i class="fas fa-file-medical me-1"></i>Records
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-logout" href="{% url 'doctorapp:doctor_logout' %}" onclick="return confirm('Are you sure you want to logout?');">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% include 'Doctor/messages.html' %}
+
+    <div class="container-fluid px-4">
+        
+        <!-- Back Button -->
+        <div class="back-button mt-3">
+            <a href="{% url 'doctorapp:doctorindex' %}">
+                <i class="fas fa-arrow-left"></i>Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2><i class="fas fa-baby me-2"></i>Delivery Due Soon</h2>
+            <p>Patients with expected delivery dates within the next 30 days</p>
+        </div>
+
+        <!-- Patients List -->
+        {% if patients %}
+            {% for patient in patients %}
+            <div class="patient-card">
+                <div class="patient-header">
+                    <div>
+                        <div class="patient-name">{{ patient.patient_name }}</div>
+                        <div class="patient-id">Patient ID: {{ patient.patient_id }}</div>
+                    </div>
+                    <span class="due-badge {{ patient.urgency_class }}">
+                        <i class="fas fa-clock me-1"></i>{{ patient.days_until_due }} days
+                    </span>
+                </div>
+                
+                <div class="patient-info">
+                    <div class="info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span><strong>EDD:</strong> {{ patient.edd_date }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-pregnancy-woman"></i>
+                        <span><strong>Trimester:</strong> {{ patient.current_trimester|default:"N/A" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-heartbeat"></i>
+                        <span><strong>Age:</strong> {{ patient.age }} years</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <span><strong>Contact:</strong> {{ patient.phone|default:"Not available" }}</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{% url 'doctorapp:patient_info' patient.patient_id %}" class="btn-view">
+                        <i class="fas fa-info-circle"></i>
+                        <span>View Details</span>
+                    </a>
+                    <a href="{% url 'doctorapp:patient_profile' patient.patient_id %}" class="btn-view ">
+                        <i class="fas fa-file-medical"></i>
+                        <span>View Profile</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-check"></i>
+                <h4>No Deliveries Due Soon</h4>
+                <p>There are no patients with expected delivery dates in the next 30 days.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% include 'Doctor/Footer.html' %}
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% load static %}
+{% include 'Guest/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Safe Delivery & Postnatal Care</h1>
+        <p class="fs-5">Comprehensive support before, during, and after delivery.</p>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <img src="{% static 'Guest/img/service-6.jpg' %}" 
+                     class="img-fluid rounded shadow" 
+                     alt="Safe Delivery">
+            </div>
+            <div class="col-lg-6">
+                <h3 class="mb-4">Safe Delivery & Postnatal Care</h3>
+                <p>
+                    We ensure a safe and comfortable delivery experience with comprehensive 
+                    support from experienced healthcare professionals. Our postnatal care program 
+                    supports your recovery and adjustment to motherhood.
+                </p>
+                <ul class="list-unstyled">
+                    <li>✔ Delivery planning & preparation</li>
+                    <li>✔ Labor support & pain management</li>
+                    <li>✔ Newborn care guidance</li>
+                    <li>✔ Postnatal recovery support</li>
+                    <li>✔ Breastfeeding assistance</li>
+                </ul>
+                <a href="{% url 'guestapp:login' %}" class="btn btn-primary mt-4 px-4 py-2">
+                   Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Guest/footer.html' %}

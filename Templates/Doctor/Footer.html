@@ -1,0 +1,155 @@
+{% load static %}
+<style>
+
+    .footer {
+        background: linear-gradient(135deg, #f8fbff, #eef4ff);
+        color: #2c3e50;
+        border-top: 3px solid #4e73df;
+    }
+
+    .footer h1, 
+    .footer h4 {
+        font-weight: 600;
+        color: #4e73df;
+    }
+
+    .footer p {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .footer .btn-square {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #4e73df;
+        color: white;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(78, 115, 223, 0.2);
+    }
+
+    .footer .btn-square:hover {
+        background: #3d5fd8;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(232, 62, 140, 0.3);
+    }
+
+    .footer .btn-link {
+        display: block;
+        color: #6c757d;
+        text-decoration: none;
+        padding: 6px 0;
+        padding-left: 0;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+        margin-left: 0;
+    }
+
+    .footer .btn-link:hover {
+        color: #4e73df;
+        border-left: 3px solid #4e73df;
+        padding-left: 8px;
+    }
+
+    .copyright {
+        background: #4e73df;
+        color: #ffffff;
+        font-size: 14px;
+    }
+
+    .copyright span {
+        font-weight: 600;
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 99;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(45deg, #4e73df, #36b9cc);
+        border: none;
+        border-radius: 50%;
+        display: none;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    }
+
+</style>
+
+<div class="container-fluid footer pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <!-- About Section -->
+            <div class="col-lg-3 col-md-6">
+                <h1 class="mb-4">
+                    <i class="fa fa-heartbeat fs-1 me-3 text-danger"></i>Bloom Moms Care
+                </h1>
+                <p>
+                    Bloom Moms Care provides compassionate and comprehensive 
+                    maternal healthcare services, supporting mothers through 
+                    pregnancy, delivery, and postnatal recovery with care and expertise.
+                </p>
+                <div class="d-flex pt-2">
+                    <a class="btn btn-square me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-square me-2"><i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-square me-2"><i class="fab fa-youtube"></i></a>
+                    <a class="btn btn-square"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h4 class="mb-4">Contact Info</h4>
+                <p><i class="fa fa-map-marker-alt me-2 text-primary"></i>Main Medical Road, Your City, India</p>
+                <p><i class="fa fa-phone-alt me-2 text-primary"></i>+91 98765 43210</p>
+                <p><i class="fa fa-envelope me-2 text-primary"></i>support@bloommomscare.com</p>
+                <p><i class="fa fa-clock me-2 text-primary"></i>Mon - Sat: 9:00 AM - 6:00 PM</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-3 col-md-6">
+                <h4 class="mb-4">Quick Links</h4>
+                <a class="btn btn-link" href="{% url 'doctorapp:doctorindex' %}">Dashboard</a>
+                <a class="btn btn-link" href="{% url 'doctorapp:doctor_patients' %}">Patients</a>
+                <a class="btn btn-link" href="{% url 'doctorapp:doctor_appointments_by_date' %}">Appointments</a>
+                <a class="btn btn-link" href="{% url 'notificationapp:doctor_notifications' %}">Notifications</a>
+            </div>
+
+            <!-- Professional Services -->
+            <div class="col-lg-3 col-md-6">
+                <h4 class="mb-4">Professional Services</h4>
+                <p class="mb-2">✔ Patient Management</p>
+                <p class="mb-2">✔ Medical Records</p>
+                <p class="mb-2">✔ Appointment Scheduling</p>
+                <p class="mb-2">✔ Prescription Management</p>
+                <p class="mb-2">✔ Delivery Monitoring</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="container-fluid copyright py-3">
+        <div class="container text-center">
+            &copy; 2026 <span>Bloom Moms Care</span>. All Rights Reserved. <br>
+            Designed & Developed for Maternal Healthcare Management System
+        </div>
+    </div>
+</div>
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-lg back-to-top">
+    <i class="bi bi-arrow-up text-white"></i>
+</a>

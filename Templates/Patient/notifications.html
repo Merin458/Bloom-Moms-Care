@@ -1,0 +1,389 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<style>
+    .unread-notification {
+        background-color: #e7f3ff;
+        border-left: 4px solid #0d6efd;
+    }
+</style>
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <h1 class="display-5 mb-3">Notifications</h1>
+                <p class="fs-5 text-muted">Your appointment and health updates</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                {% if unread_count > 0 %}
+                    <a href="{% url 'notificationapp:mark_all_read' 'Patient' %}" class="btn btn-primary">
+                        <i class="fas fa-check-double me-2"></i>Mark All as Read
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                {% if notifications %}
+                    <div class="list-group">
+                        {% for notif in notifications %}
+                            <a href="{% url 'notificationapp:mark_as_read' notif.id %}" 
+                               class="list-group-item list-group-item-action {% if not notif.is_read %}alert-info unread-notification{% endif %}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">
+                                        {% if not notif.is_read %}
+                                            <i class="fas fa-envelope text-primary me-2"></i>
+                                            <span class="badge bg-danger">New</span>
+                                        {% else %}
+                                            <i class="fas fa-envelope-open text-muted me-2"></i>
+                                        {% endif %}
+                                    </h6>
+                                    <small class="text-muted">{{ notif.created_at|date:"M d, Y H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ notif.message }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No notifications yet. You'll see updates about your appointments and health records here.
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Unread</h5>
+                        <h2 class="text-primary">{{ unread_count }}</h2>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total</h5>
+                        <p class="card-text fs-5">{{ notifications|length }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}
+
+
+<div class="container-fluid py-5">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <h1 class="display-5 mb-3">Notifications</h1>
+                <p class="fs-5 text-muted">View all your notifications and updates</p>
+            </div>
+            <div class="col-lg-4 text-end">
+            </div>
+        </div>
+
+        <!-- Tabs for filtering -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" 
+                                type="button" role="tab" aria-controls="all" aria-selected="true">
+                            All Notifications
+                            <span class="badge bg-primary ms-2">{{ notifications.count }}</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="unread-tab" data-bs-toggle="tab" data-bs-target="#unread" 
+                                type="button" role="tab" aria-controls="unread" aria-selected="false">
+                            Unread
+                            <span class="badge bg-danger ms-2">{{ unread_count }}</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="tab-content" id="notificationTabContent">
+            <!-- All Notifications Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                {% if notifications %}
+                    <div class="row">
+                        <div class="col-12">
+                            {% for notification in notifications %}
+                                <div class="card mb-3 {% if not notification.is_read %}border-primary border-3{% endif %} notification-card" 
+                                     data-notification-id="{{ notification.id }}">
+                                    <div class="card-body">
+                                        <div class="row align-items-start">
+                                            <div class="col-auto">
+                                                {% if not notification.is_read %}
+                                                    <span class="badge bg-danger rounded-pill">New</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary rounded-pill">Read</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="card-title mb-2">
+                                                    <i class="fas fa-bell text-primary me-2"></i>
+                                                    {{ notification.title }}
+                                                </h5>
+                                                <p class="card-text text-muted mb-2">
+                                                    {{ notification.message }}
+                                                </p>
+                                                <small class="text-muted">
+                                                    <i class="far fa-calendar me-1"></i>
+                                                    {{ notification.created_at|date:"M d, Y H:i" }}
+                                                </small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="btn-group" role="group">
+                                                    {% if not notification.is_read %}
+                                                        <button type="button" class="btn btn-sm btn-outline-primary mark-read-btn" 
+                                                                data-notification-id="{{ notification.id }}" 
+                                                                title="Mark as read">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn" 
+                                                            data-notification-id="{{ notification.id }}" 
+                                                            title="Delete notification">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card border-0 bg-light">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-inbox fs-1 text-muted mb-3" style="display: block;"></i>
+                            <h5 class="card-title text-muted">No Notifications</h5>
+                            <p class="card-text text-muted">You don't have any notifications yet.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Unread Notifications Tab -->
+            <div class="tab-pane fade" id="unread" role="tabpanel" aria-labelledby="unread-tab">
+                {% if unread_notifications %}
+                    <div class="row">
+                        <div class="col-12">
+                            {% for notification in unread_notifications %}
+                                <div class="card mb-3 border-primary border-3 notification-card" 
+                                     data-notification-id="{{ notification.id }}">
+                                    <div class="card-body">
+                                        <div class="row align-items-start">
+                                            <div class="col-auto">
+                                                <span class="badge bg-danger rounded-pill">New</span>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="card-title mb-2">
+                                                    <i class="fas fa-bell text-primary me-2"></i>
+                                                    {{ notification.title }}
+                                                </h5>
+                                                <p class="card-text text-muted mb-2">
+                                                    {{ notification.message }}
+                                                </p>
+                                                <small class="text-muted">
+                                                    <i class="far fa-calendar me-1"></i>
+                                                    {{ notification.created_at|date:"M d, Y H:i" }}
+                                                </small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary mark-read-btn" 
+                                                            data-notification-id="{{ notification.id }}" 
+                                                            title="Mark as read">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn" 
+                                                            data-notification-id="{{ notification.id }}" 
+                                                            title="Delete notification">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card border-0 bg-light">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-check-circle fs-1 text-success mb-3" style="display: block;"></i>
+                            <h5 class="card-title text-muted">All Caught Up!</h5>
+                            <p class="card-text text-muted">You have no unread notifications.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for notification actions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mark as read button
+    document.querySelectorAll('.mark-read-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const notificationId = this.dataset.notificationId;
+            markNotificationAsRead(notificationId);
+        });
+    });
+
+    // Delete button
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const notificationId = this.dataset.notificationId;
+            if (confirm('Are you sure you want to delete this notification?')) {
+                deleteNotification(notificationId);
+            }
+        });
+    });
+});
+
+function markNotificationAsRead(notificationId) {
+    fetch(`/notifications/patient/api/mark-as-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const card = document.querySelector(`[data-notification-id="${notificationId}"]`);
+            if (card) {
+                card.classList.remove('border-primary', 'border-3');
+                card.querySelector('.badge').classList.remove('bg-danger');
+                card.querySelector('.badge').classList.add('bg-secondary');
+                card.querySelector('.badge').textContent = 'Read';
+                card.querySelector('.mark-read-btn').style.display = 'none';
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function deleteNotification(notificationId) {
+    fetch(`/notifications/patient/api/delete/${notificationId}/`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const card = document.querySelector(`[data-notification-id="${notificationId}"]`);
+            if (card) {
+                card.style.display = 'none';
+                // Reload page after 1 second
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+<!-- Styling -->
+<style>
+    .notification-card {
+        transition: all 0.3s ease;
+    }
+
+    .notification-card:hover {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transform: translateY(-2px);
+    }
+
+    .notification-card.border-3 {
+        border-width: 3px !important;
+    }
+
+    .tab-pane {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .btn-group .btn {
+        border-radius: 0.25rem;
+        padding: 0.35rem 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.65rem;
+    }
+
+    .nav-tabs .nav-link {
+        border-color: #e3e6f0;
+        color: #858796;
+    }
+
+    .nav-tabs .nav-link.active {
+        border-color: #e3e6f0;
+        border-bottom-color: white;
+        background-color: white;
+        color: #0d6efd;
+    }
+
+    .nav-tabs .nav-link:hover {
+        border-color: #e3e6f0;
+        color: #0d6efd;
+    }
+</style>
+
+{% include 'Patient/footer.html' %}

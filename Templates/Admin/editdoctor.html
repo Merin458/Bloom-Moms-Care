@@ -1,0 +1,79 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Edit Doctors Details</h4>
+                  <p class="card-description">
+                    Doctor Editing
+                  </p>
+                  <form class="forms-sample" action="{% url 'adminapp:editdoctor' id=doc.doctor_id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Doctor Name</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Name" name="doctorname" value="{{doc.doctor_name}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Email</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Email" name="email" value="{{doc.email}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Specialization</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Specialization" name="specialization" value="{{doc.specialization}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Experience</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Experience" name="experience" value="{{doc.experience}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Contact Number</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Contact Number" name="contact" value="{{doc.phone}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Hospital Timing</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Hospital Timing" name="timing" value="{{doc.hospital_timimg}}">
+                      </div>
+                      </div>
+
+                      <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Image</label>
+                      <div class="col-sm-9">
+                        <input type="file" class="form-control" id="exampleInputUsername2" placeholder="Photo" name="dimage">   
+                        </div>
+                    </div>
+
+                      <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Status</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Status" name="status" value="{{doc.status}}">   
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Password</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Password" name="pw" value="{{doc.password}}">
+                      </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a href="{% url 'adminapp:viewdoctors' %}" class="btn btn-light">Cancel</a>
+                  </form>
+                </div>
+                {% include 'Admin/footer.html' %}

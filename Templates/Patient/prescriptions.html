@@ -1,0 +1,63 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+{% include 'Patient/messages.html' %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+                ← Back
+            </a>
+        </div>
+
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h1 class="display-5">My Prescriptions</h1>
+        </div>
+
+        {% if prescriptions %}
+            {% for p in prescriptions %}
+                <div class="card border-0 shadow mb-4">
+
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <strong>Date:</strong> {{ p.prescription_date }}
+                            </span>
+                            <span>
+                                <strong>Doctor:</strong> Dr. {{ p.doctor.doctor_name }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <p><strong>Diagnosis:</strong> {{ p.diagnosis }}</p>
+                                <p><strong>Medicines:</strong> {{ p.medicines }}</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <p><strong>Dosage:</strong> {{ p.dosage }}</p>
+                                <p>
+                                    <strong>Additional Notes:</strong>
+                                    {{ p.additional_notes|default:"-" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info text-center shadow-sm">
+                No prescriptions available yet.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

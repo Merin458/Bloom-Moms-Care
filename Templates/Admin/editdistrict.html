@@ -1,0 +1,26 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+<div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Edit Your District Here</h4>
+                  <p class="card-description">
+                    District Editing
+                  </p>
+                  <form class="forms-sample" action="{% url 'editdistrict' dist.district_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">District</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="District" name="districtname" value="{{dist.district_name}}">
+                      </div>
+                    </div>
+                   
+                    
+                    
+                    
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+                  </form>
+                </div>
+                {% include 'Admin/footer.html' %}

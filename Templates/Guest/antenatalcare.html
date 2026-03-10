@@ -1,0 +1,49 @@
+{% load static %}
+{% include 'Guest/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Antenatal Care</h1>
+        <p class="fs-5">Comprehensive monitoring and care throughout your pregnancy journey.</p>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <img src="{% static 'Guest/img/service-1.jpg' %}" 
+                     class="img-fluid rounded shadow" 
+                     alt="Antenatal Care">
+            </div>
+            <div class="col-lg-6">
+                <h3 class="mb-4">What is Antenatal Care?</h3>
+                <p>
+                    Antenatal care refers to the regular medical checkups and monitoring 
+                    provided during pregnancy to ensure the health of both mother and baby.
+                </p>
+                <ul class="list-unstyled">
+                    <li>✔ Regular health assessments</li>
+                    <li>✔ Trimester-wise monitoring</li>
+                    <li>✔ Blood tests & medical evaluations</li>
+                    <li>✔ Prescription management</li>
+                    <li>✔ Risk assessment & early detection</li>
+                </ul>
+                <a href="{% url 'guestapp:login' %}" class="btn btn-primary mt-4 px-4 py-2">
+                   Book Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Guest/footer.html' %}

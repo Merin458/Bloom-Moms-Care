@@ -1,0 +1,135 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+{% include 'Patient/messages.html' %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1 class="display-5 mb-0">Medical Records</h1>
+            <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+                ← Back
+            </a>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="card border-0 shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Upload External Lab Test Report</h5>
+            </div>
+
+            <div class="card-body">
+                {% if is_transferred %}
+                    <div class="alert alert-secondary" style="border-left: 5px solid #ff9800;">
+                        <h5 style="color: #ff9800;"><i class="fas fa-exchange-alt me-2"></i>Patient Transferred</h5>
+                        <p class="mb-2">
+                            <strong>Your case has been transferred to another healthcare facility.</strong>
+                        </p>
+                        <p class="mb-0">
+                            You cannot upload new medical records at this time. All existing records remain viewable below.
+                            Please contact our administration for further assistance.
+                        </p>
+                    </div>
+                {% elif is_locked %}
+                    <div class="alert alert-warning">
+                        <strong>Your profile is locked.</strong> Uploading new medical records is disabled because your profile was locked 6 months after delivery.
+                        <br>
+                        <a href="{% url 'patientapp:profile_unlock' %}" class="btn btn-primary btn-sm mt-3">
+                            Unlock Profile Now
+                        </a>
+                        <p class="mt-2 mb-0 small">
+                            You can still view your previous records and prescriptions.
+                        </p>
+                    </div>
+                {% else %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Record Date</label>
+                            <input type="date" name="record_date" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Upload File</label>
+                            <input type="file" name="patient_uploaded_file" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Upload Record
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Records Table -->
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Previous Records</h5>
+            </div>
+
+            <div class="card-body">
+                {% if records %}
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Uploaded By</th>
+                                <th>File</th>
+                                <th>Doctor's Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in records %}
+                            <tr>
+                                <td>{{ r.record_date }}</td>
+                                <td>{{ r.description }}</td>
+                                <td>{{ r.uploaded_by }}</td>
+                                <td>
+                                    {% if r.patient_uploaded_file %}
+                                        <a href="{{ r.patient_uploaded_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    {% elif r.admin_uploaded_file %}
+                                        <a href="{{ r.admin_uploaded_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if r.doctor_note %}
+                                        <span class="text-success fw-semibold">
+                                            {{ r.doctor_note }}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-muted">
+                                            Pending
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p class="text-muted">No medical records uploaded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

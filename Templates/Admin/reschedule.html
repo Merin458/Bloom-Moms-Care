@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reschedule Appointment</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f2f6ff;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 420px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .info {
+            background: #f7f8ff;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .info p {
+            margin: 5px 0;
+        }
+
+        label {
+            font-weight: 600;
+            color: #34495e;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #6c63ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: orange;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e69500;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #6c63ff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Reschedule Appointment</h2>
+
+        <div class="info">
+            <p><strong>Patient:</strong> {{ appointment.patient_id.patient_name }}</p>
+            <p><strong>Doctor:</strong> {{ appointment.doctor_id.doctor_name }}</p>
+            <p><strong>Current Date:</strong> {{ appointment.appointment_date }}</p>
+            <p><strong>Current Time:</strong> {{ appointment.appointment_time }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>New Appointment Date</label>
+            <input type="date" name="reschedule_date" value="{{ appointment.reschedule_date }}" required>
+
+            <label>New Appointment Time</label>
+            <input type="time" name="reschedule_time" value="{{ appointment.reschedule_time }}" required>
+
+            <label>Admin Note (Optional)</label>
+            <textarea name="admin_note" placeholder="Reason for rescheduling..."></textarea>
+
+            <button type="submit">Update Appointment</button>
+        </form>
+
+        <a href="{% url 'adminapp:view_appointments' %}" class="back-link">
+            ← Back to Appointments
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

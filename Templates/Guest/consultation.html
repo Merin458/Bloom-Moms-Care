@@ -1,0 +1,50 @@
+{% load static %}
+{% include 'Guest/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Doctor Consultation & Appointment Booking</h1>
+        <p class="fs-5">Easy access to expert obstetricians for personalized care.</p>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <img src="{% static 'Guest/img/service-3.jpg' %}" 
+                     class="img-fluid rounded shadow" 
+                     alt="Doctor Consultation">
+            </div>
+            <div class="col-lg-6">
+                <h3 class="mb-4">Doctor Consultation & Appointment Booking</h3>
+                <p>
+                    Schedule consultations with our experienced obstetricians who provide 
+                    personalized care tailored to your pregnancy needs. Our online appointment 
+                    system makes booking convenient and hassle-free.
+                </p>
+                <ul class="list-unstyled">
+                    <li>✔ Experienced obstetricians</li>
+                    <li>✔ Online & in-person consultations</li>
+                    <li>✔ Flexible scheduling</li>
+                    <li>✔ Quick appointment booking</li>
+                    <li>✔ Follow-up care management</li>
+                </ul>
+                <a href="{% url 'guestapp:login' %}" class="btn btn-primary mt-4 px-4 py-2">
+                   Book Consultation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Guest/footer.html' %}

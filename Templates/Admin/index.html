@@ -1,0 +1,283 @@
+
+ {% load static %}
+{% include 'Admin/header.html' %}
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          {% include 'Admin/messages.html' %}
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold">Welcome Admin</h3>
+                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! </span></h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                 <div class="justify-content-end d-flex">
+                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                    <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                     <i class="mdi mdi-calendar"></i> Today ({{ today|date:"d M Y" }})
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
+                      <a class="dropdown-item" href="#">January - March</a>
+                      <a class="dropdown-item" href="#">March - June</a>
+                      <a class="dropdown-item" href="#">June - August</a>
+                      <a class="dropdown-item" href="#">August - November</a>
+                    </div>
+                  </div>
+                  <a href="{% url 'adminapp:export_patient_report' %}" class="btn btn-sm btn-primary ml-2">
+                    Download Patient Report
+                  </a>
+                  <a href="{% url 'adminapp:admin_logout' %}" class="btn btn-sm btn-danger ml-2" onclick="return confirm('Are You Sure You Want to Logout?');">
+                    <i class="mdi mdi-power"></i> Logout
+                  </a>
+                 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card tale-bg">
+                <div class="card-people mt-auto">
+                  <img src="{% static 'Admin/images/dashboard/people.svg' %}" alt="people">
+                  <div class="weather-info">
+                    <div class="d-flex">
+                      <div>
+                        <h2 class="mb-0 font-weight-normal"><i class="icon-sun mr-2"></i>31<sup>C</sup></h2>
+                      </div>
+                      <div class="ml-2">
+                        <h4 class="location font-weight-normal">Bangalore</h4>
+                        <h6 class="font-weight-normal">India</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin transparent">
+              <div class="row">
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card card-tale">
+                    <div class="card-body">
+                      <p class="mb-4">Today’s Appointments</p>
+                      <p class="fs-30 mb-2">{{ todays_appointments|default:"0" }}</p>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card card-dark-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Total Patients</p>
+                      <p class="fs-30 mb-2">{{ total_patients|default:"0" }}</p>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                  <div class="card card-light-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Total Doctors</p>
+                      <p class="fs-30 mb-2">{{ total_doctors|default:"0" }}</p>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 stretch-card transparent">
+                  <div class="card card-light-danger">
+                    <div class="card-body">
+                      <p class="mb-4">Total Payments</p>
+                      <p class="fs-30 mb-2">{{ total_payments|default:"0" }}</p>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Monthly Patient Registration Trend</p>
+                  <p class="font-weight-500">New patient registrations over the last 6 months</p>
+                  <div class="d-flex flex-wrap mb-5">
+                    <div class="mr-5 mt-3">
+                      <p class="text-muted">Total New Patients</p>
+                      <h3 class="text-primary fs-30 font-weight-medium">{{ total_patients }}</h3>
+                    </div>
+                    {% if registration_counts %}
+                    <div class="mr-5 mt-3">
+                      <p class="text-muted">This Month</p>
+                      <h3 class="text-primary fs-30 font-weight-medium">{{ registration_counts|last }}</h3>
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div style="position: relative; width: 100%; height: 300px; display: block;">
+                    <canvas id="registration-chart" data-months='{{ months_labels_json|safe }}' data-counts='{{ registration_counts_json|safe }}' style="width: 100% !important; height: 300px !important;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                 <div class="d-flex justify-content-between">
+                  <p class="card-title">Doctor Availability Overview</p>
+                  <a href="#" class="text-info">Manage</a>
+                 </div>
+                  <p class="font-weight-500">Track doctor availability, upcoming leave, and appointment load to keep patient care smooth.</p>
+                  <div class="mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted">Active Doctors</span>
+                      <span class="font-weight-bold">{{ total_doctors|default:"0" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted">Today's Appointments</span>
+                      <span class="font-weight-bold">{{ todays_appointments|default:"0" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <span class="text-muted">Total Patients</span>
+                      <span class="font-weight-bold">{{ total_patients|default:"0" }}</span>
+                    </div>
+                  </div>
+                  <div style="position: relative; width: 100%; height: 250px; display: block;">
+                    <div id="sales-legend" class="chartjs-legend mb-2"></div>
+                    <canvas id="sales-chart" 
+                      data-labels='["Today Appointments","Total Patients","Total Doctors","Total Payments"]'
+                      data-values='[{{ todays_appointments|default:"0" }},{{ total_patients|default:"0" }},{{ total_doctors|default:"0" }},{{ total_payments|default:"0" }}]'
+                      style="width: 100% !important; height: 250px !important;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card position-relative">
+                <div class="card-body">
+                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+                     <p class="card-title mb-4">Doctor-wise Workload & Availability Report</p>
+                     <div class="row">
+                       <div class="col-md-6">
+                         <p class="text-muted mb-3">Active Doctors Status</p>
+                         <div class="table-responsive">
+                           <table class="table table-borderless table-striped">
+                             <thead>
+                               <tr>
+                                 <th class="text-muted">Doctor Name</th>
+                                 <th class="text-muted">Assigned Patients</th>
+                                 <th class="text-muted">Today's Appointments</th>
+                                 <th class="text-muted">Status</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               {% for doctor in doctor_workload %}
+                               <tr>
+                                 <td>{{ doctor.name }}</td>
+                                 <td><span class="font-weight-bold">{{ doctor.assigned_patients }}</span></td>
+                                 <td><span class="font-weight-bold">{{ doctor.today_appointments }}</span></td>
+                                 <td>
+                                   {% if doctor.status == "Available" %}
+                                     <span class="badge badge-success">{{ doctor.status }}</span>
+                                   {% else %}
+                                     <span class="badge badge-warning">{{ doctor.status }}</span>
+                                   {% endif %}
+                                 </td>
+                               </tr>
+                               {% empty %}
+                               <tr>
+                                 <td colspan="4" class="text-center text-muted">No active doctors found</td>
+                               </tr>
+                               {% endfor %}
+                             </tbody>
+                           </table>
+                         </div>
+                       </div>
+                       <div class="col-md-6">
+                         <p class="text-muted mb-3">Doctor Patient Load Distribution</p>
+                         <div style="position: relative; width: 100%; height: 300px; display: block;">
+                           <canvas id="doctor-workload-chart"
+                             data-doctor-names='{{ doctor_names_json|safe }}'
+                             data-patient-counts='{{ patient_counts_json|safe }}'
+                             style="width: 100% !important; height: 300px !important;"></canvas>
+                         </div>
+                       </div>
+                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-7 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-0">Appointment Status Distribution</p>
+                  <div style="position: relative; width: 100%; height: 400px; display: block;">
+                    <canvas id="appointment-status-chart"
+                      data-labels='["Accepted", "Rescheduled", "Pending"]'
+                      data-values='[{{ accepted_count|default:"0" }},{{ rescheduled_count|default:"0" }},{{ pending_count|default:"0" }}]'
+                      style="width: 100% !important; height: 400px !important;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-0">Patient Distribution by Pregnancy Trimester</p>
+                  <div style="position: relative; width: 100%; height: 400px; display: block;">
+                    <canvas id="trimester-distribution-chart"
+                      data-labels='["First Trimester", "Second Trimester", "Third Trimester"]'
+                      data-values='[{{ first_trimester_count|default:"0" }},{{ second_trimester_count|default:"0" }},{{ third_trimester_count|default:"0" }}]'
+                      style="width: 100% !important; height: 400px !important;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>   
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{% static 'Admin/vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'Admin/vendors/chart.js/Chart.min.js' %}"></script>
+  <script src="{% static 'Admin/vendors/datatables.net/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'Admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+  <script src="{% static 'Admin/js/dataTables.select.min.js' %}"></script>
+
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'Admin/js/off-canvas.js' %}"></script>
+  <script src="{% static 'Admin/js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'Admin/js/template.js' %}"></script>
+  <script src="{% static 'Admin/js/settings.js' %}"></script>
+  <script src="{% static 'Admin/js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{% static 'Admin/js/dashboard.js' %}"></script>
+  <script src="{% static 'Admin/js/Chart.roundedBarCharts.js' %}"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
+{% include 'Admin/footer.html' %}
+
+

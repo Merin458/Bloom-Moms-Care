@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Patient Report - Bloom Moms Care</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #36b9cc;
+            --light-bg: #e3f2fd;
+            --dark-text: #333;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Clinical Navbar */
+        .clinical-navbar {
+            background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .clinical-navbar .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .clinical-navbar .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .clinical-navbar .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .clinical-navbar .btn-logout {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+        }
+        
+        .clinical-navbar .btn-logout:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        .notification-icon {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            line-height: 1;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .page-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+            margin: 0;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .report-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-generate-excel {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .btn-generate-excel:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            color: white;
+        }
+        
+        .patients-table {
+            margin-top: 2rem;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead {
+            background-color: var(--light-bg);
+        }
+        
+        .table th {
+            color: var(--primary-color);
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .back-button {
+            margin-bottom: 1rem;
+        }
+        
+        .back-button a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+        
+        .stat-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, var(--light-bg) 0%, #fff 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-box .label {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Clinical Navbar -->
+    <nav class="navbar navbar-expand-lg clinical-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'doctorapp:doctorindex' %}">
+                <i class="fas fa-heartbeat me-2"></i>Bloom Moms Care
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctorindex' %}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctor_patients' %}">
+                            <i class="fas fa-users me-1"></i>Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'doctorapp:doctor_appointments_by_date' %}">
+                            <i class="fas fa-calendar-alt me-1"></i>Appointments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link notification-icon" href="{% url 'notificationapp:doctor_notifications' %}" title="View Notifications">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_count > 0 %}
+                                <span class="notification-badge">{{ unread_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-logout" href="{% url 'doctorapp:doctor_logout' %}" onclick="return confirm('Are you sure you want to logout?');">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% include 'Doctor/messages.html' %}
+
+    <div class="container-fluid px-4">
+        
+        <!-- Back Button -->
+        <div class="back-button mt-3">
+            <a href="{% url 'doctorapp:doctorindex' %}">
+                <i class="fas fa-arrow-left"></i>Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="fas fa-file-excel me-2"></i>Generate Patient Report</h2>
+                    <p>Export patient data to Excel spreadsheet for analysis and record-keeping</p>
+                </div>
+                <div>
+                    <a href="{% url 'doctorapp:export_patients_excel' %}" class="btn-generate-excel">
+                        <i class="fas fa-download"></i>
+                        <span>Download Excel Report</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Summary -->
+        <div class="stat-summary">
+            <div class="stat-box">
+                <div class="number">{{ total_patients }}</div>
+                <div class="label">Total Patients</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">{{ first_trimester }}</div>
+                <div class="label">First Trimester</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">{{ second_trimester }}</div>
+                <div class="label">Second Trimester</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">{{ third_trimester }}</div>
+                <div class="label">Third Trimester</div>
+            </div>
+        </div>
+
+        <!-- Patients List -->
+        <div class="report-card">
+            <h5><i class="fas fa-list me-2"></i>Patient List Preview</h5>
+            
+            {% if patients %}
+            <div class="patients-table">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Patient Name</th>
+                                <th>Age</th>
+                                <th>Trimester</th>
+                                <th>EDD</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr>
+                                <td>{{ patient.patient_id }}</td>
+                                <td><strong>{{ patient.patient_name }}</strong></td>
+                                <td>{{ patient.age }}</td>
+                                <td>
+                                    {% if patient.current_trimester %}
+                                        <span class="badge bg-primary">{{ patient.current_trimester }}</span>
+                                    {% else %}
+                                        <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ patient.edd_date|default:"Not specified" }}</td>
+                                <td>{{ patient.phone|default:"N/A" }}</td>
+                                <td>{{ patient.email|default:"N/A" }}</td>
+                                <td>
+                                    {% if patient.status|lower == 'active' %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% elif patient.status|lower == 'transferred' %}
+                                        <span class="badge bg-warning text-dark">Transferred</span>
+                                    {% elif patient.status|lower == 'miscarriage' %}
+                                        <span class="badge bg-danger">Miscarriage</span>
+                                    {% elif patient.status|lower == 'delivered' %}
+                                        <span class="badge bg-info text-dark">Delivered</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ patient.status|default:"Unknown" }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-users-slash"></i>
+                <h5>No Patients Found</h5>
+                <p>You don't have any patients assigned yet.</p>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% include 'Doctor/Footer.html' %}
+
+</body>
+</html>

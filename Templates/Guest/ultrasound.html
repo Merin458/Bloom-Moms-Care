@@ -1,0 +1,50 @@
+{% load static %}
+{% include 'Guest/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Ultrasound & Diagnostic Services</h1>
+        <p class="fs-5">Advanced imaging technology for comprehensive fetal monitoring.</p>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <img src="{% static 'Guest/img/service-2.jpg' %}" 
+                     class="img-fluid rounded shadow" 
+                     alt="Ultrasound Services">
+            </div>
+            <div class="col-lg-6">
+                <h3 class="mb-4">Ultrasound & Diagnostic Services</h3>
+                <p>
+                    Our ultrasound services provide detailed imaging to monitor fetal development 
+                    and maternal health throughout pregnancy. We use state-of-the-art equipment 
+                    for accurate and safe diagnostics.
+                </p>
+                <ul class="list-unstyled">
+                    <li>✔ 2D & 3D ultrasound imaging</li>
+                    <li>✔ First trimester screening</li>
+                    <li>✔ Anomaly detection</li>
+                    <li>✔ Fetal growth monitoring</li>
+                    <li>✔ Doppler studies</li>
+                </ul>
+                <a href="{% url 'guestapp:login' %}" class="btn btn-primary mt-4 px-4 py-2">
+                   Book Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Guest/footer.html' %}

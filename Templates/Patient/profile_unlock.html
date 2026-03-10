@@ -1,0 +1,858 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Unlock</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .unlock-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        .unlock-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .unlock-header h1 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .unlock-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .unlock-status {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .unlock-status.locked {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .unlock-status.active {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .status-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .status-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .plan-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f9f9f9;
+        }
+        
+        .plan-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .plan-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .plan-duration {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin: 15px 0;
+        }
+        
+        .plan-price-label {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 20px;
+        }
+        
+        .plan-radio {
+            display: none;
+        }
+        
+        .plan-features {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .plan-feature {
+            padding: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .plan-feature::before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+        
+        .unlock-button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .unlock-button:hover {
+            background: #5568d3;
+        }
+        
+        .unlock-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .payment-section {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .payment-section h4 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        
+        .payment-method:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .payment-method.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .payment-method input {
+            display: none;
+        }
+        
+        .payment-method.selected label {
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        .payment-method label {
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0;
+            display: block;
+            width: 100%;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #0c5aa0;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn-pay {
+            flex: 1;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-pay:hover {
+            background: #218838;
+        }
+        
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+        
+        .unlock-end-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #155724;
+        }
+        
+        .no-plan-selected {
+            color: #dc3545;
+            font-size: 14px;
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .payment-details {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .payment-details.active {
+            display: block;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-field {
+            margin-bottom: 15px;
+        }
+        
+        .form-field label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-field input:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Success Modal */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .success-modal.active {
+            display: flex;
+        }
+        
+        .success-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn-ok {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-ok:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Back Button -->
+<div style="padding: 15px 20px;">
+    <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+        <i class="fa fa-arrow-left me-2"></i>Back
+    </a>
+</div>
+
+<div class="unlock-container">
+    <div class="unlock-header">
+        <h1>Profile Unlock Plans</h1>
+        <p>Choose a plan to unlock your profile and access all features</p>
+    </div>
+    
+    {% if is_locked %}
+    <div class="unlock-status locked">
+        <div class="status-icon">🔒</div>
+        <div class="status-text">Your Profile is Currently Locked</div>
+        <p style="margin: 10px 0 0 0; color: inherit;">Your profile was locked 6 months after delivery. Select a plan below to unlock and regain access to all features.</p>
+    </div>
+    {% elif unlock_end_date %}
+    <div class="unlock-status active">
+        <div class="status-icon">🔓</div>
+        <div class="status-text">Your Profile is Unlocked</div>
+        <p style="margin: 10px 0 0 0; color: inherit;">Unlock expires on <strong>{{ unlock_end_date|date:"F d, Y" }}</strong></p>
+    </div>
+    {% else %}
+    <div class="unlock-status">
+        <div class="status-icon">✓</div>
+        <div class="status-text">Your Profile is Active</div>
+    </div>
+    {% endif %}
+    
+    <div class="info-box">
+        <p><strong>ℹ️ What can you do when unlocked?</strong></p>
+        <p style="margin-top: 8px;">✓ Upload medical records • ✓ Book appointments • ✓ Receive prescriptions from doctors • ✓ Add consultation notes</p>
+    </div>
+    
+    {% if is_locked %}
+    <form method="POST" id="unlock-form">
+        {% csrf_token %}
+        
+        <div class="plans-grid" id="plans-grid">
+            {% for plan_id, plan_data in plans.items %}
+            <div class="plan-card" onclick="selectPlan(this, '{{ plan_id }}')">
+                <input type="radio" name="plan_id" value="{{ plan_id }}" class="plan-radio" id="plan-{{ plan_id }}">
+                
+                <div class="plan-duration">{{ plan_data.label }}</div>
+                <div class="plan-price">₹{{ plan_data.price }}</div>
+                <div class="plan-price-label">One-time payment</div>
+                
+                <div class="plan-features">
+                    <div class="plan-feature">{{ plan_data.months }} month access</div>
+                    <div class="plan-feature">Full feature access</div>
+                    <div class="plan-feature">Automatic expiry</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="no-plan-selected" id="no-plan-selected">
+            Please select a plan before proceeding
+        </div>
+        
+        <div class="payment-section" id="payment-section" style="display: none;">
+            <h4>💳 Payment Method</h4>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('CARD')">
+                    <input type="radio" name="payment_method" value="CARD" id="method-card" checked>
+                    <label for="method-card">💳 Card</label>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('UPI')">
+                    <input type="radio" name="payment_method" value="UPI" id="method-upi">
+                    <label for="method-upi">📱 UPI</label>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('NETBANKING')">
+                    <input type="radio" name="payment_method" value="NETBANKING" id="method-bank">
+                    <label for="method-bank">🏦 Net Banking</label>
+                </div>
+            </div>
+            
+            <!-- Card Payment Details -->
+            <div class="payment-details active" id="card-details">
+                <h5 style="margin-top: 0; color: #333;">Enter Card Details</h5>
+                <div class="form-field">
+                    <label>Card Number</label>
+                    <input type="text" id="card-number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div class="form-field">
+                    <label>Cardholder Name</label>
+                    <input type="text" name="card_holder_name" placeholder="John Doe">
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Expiry Date</label>
+                        <input type="text" id="card-expiry" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-field">
+                        <label>CVV</label>
+                        <input type="text" name="card_cvv" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- UPI Payment Details -->
+            <div class="payment-details" id="upi-details">
+                <h5 style="margin-top: 0; color: #333;">Enter UPI Details</h5>
+                <div class="form-field">
+                    <label>UPI ID</label>
+                    <input type="text" name="upi_id" placeholder="yourname@upi">
+                </div>
+                <div class="form-field">
+                    <label>Mobile Number (Registered with UPI)</label>
+                    <input type="tel" name="upi_mobile" placeholder="9876543210" maxlength="10">
+                </div>
+            </div>
+            
+            <!-- Net Banking Details -->
+            <div class="payment-details" id="bank-details">
+                <h5 style="margin-top: 0; color: #333;">Enter Bank Account Details</h5>
+                <div class="form-field">
+                    <label>Account Holder Name</label>
+                    <input type="text" name="bank_account_holder" placeholder="John Doe">
+                </div>
+                <div class="form-field">
+                    <label>Account Number</label>
+                    <input type="text" name="bank_account_number" placeholder="1234567890">
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>IFSC Code</label>
+                        <input type="text" name="bank_ifsc_code" placeholder="SBIN0001234" maxlength="11">
+                    </div>
+                    <div class="form-field">
+                        <label>Bank Name</label>
+                        <input type="text" name="bank_name" placeholder="State Bank of India">
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <input type="hidden" name="payment_status" id="payment-status" value="">
+            
+            <div class="button-group">
+                <button type="button" class="btn-pay" onclick="processPayment()">Proceed to Payment</button>
+                <button type="button" class="btn-cancel" onclick="resetForm()">Cancel</button>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <div class="unlock-end-info">
+        <h5 style="margin-top: 0;">✓ Profile Unlocked Successfully</h5>
+        {% if unlock_end_date %}
+        <p style="margin: 10px 0 0 0;">Your unlock will expire on <strong>{{ unlock_end_date|date:"F d, Y" }}</strong>. You can purchase another plan to extend your access.</p>
+        {% endif %}
+        <div style="margin-top: 15px;">
+            <a href="{% url 'patientapp:patientindex' %}" class="btn-ok" style="text-decoration: none; display: inline-block;">OK - View Profile</a>
+        </div>
+    </div>
+    
+    <div class="plans-grid">
+        {% for plan_id, plan_data in plans.items %}
+        <div class="plan-card" onclick="selectPlan(this, '{{ plan_id }}')">
+            <input type="radio" name="plan_id" value="{{ plan_id }}" class="plan-radio" id="plan-{{ plan_id }}">
+            
+            <div class="plan-duration">{{ plan_data.label }}</div>
+            <div class="plan-price">₹{{ plan_data.price }}</div>
+            <div class="plan-price-label">One-time payment</div>
+            
+            <div class="plan-features">
+                <div class="plan-feature">{{ plan_data.months }} month access</div>
+                <div class="plan-feature">Full feature access</div>
+                <div class="plan-feature">Automatic expiry</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <form method="POST" id="unlock-form-extend">
+        {% csrf_token %}
+        
+        <div class="no-plan-selected" id="no-plan-selected-extend">
+            Please select a plan before proceeding
+        </div>
+        
+        <div class="payment-section" id="payment-section-extend" style="display: none;">
+            <h4>💳 Payment Method</h4>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('CARD')">
+                    <input type="radio" name="payment_method" value="CARD" id="method-CARD-extend" checked>
+                    <label for="method-CARD-extend">💳 Card</label>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('UPI')">
+                    <input type="radio" name="payment_method" value="UPI" id="method-UPI-extend">
+                    <label for="method-UPI-extend">📱 UPI</label>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('NETBANKING')">
+                    <input type="radio" name="payment_method" value="NETBANKING" id="method-NETBANKING-extend">
+                    <label for="method-NETBANKING-extend">🏦 Net Banking</label>
+                </div>
+            </div>
+            
+            <!-- Card Payment Details -->
+            <div class="payment-details active" id="card-details-extend">
+                <h5 style="margin-top: 0; color: #333;">Enter Card Details</h5>
+                <div class="form-field">
+                    <label>Card Number</label>
+                    <input type="text" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div class="form-field">
+                    <label>Cardholder Name</label>
+                    <input type="text" name="card_holder_name" placeholder="John Doe">
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Expiry Date</label>
+                        <input type="text" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-field">
+                        <label>CVV</label>
+                        <input type="text" name="card_cvv" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- UPI Payment Details -->
+            <div class="payment-details" id="upi-details-extend">
+                <h5 style="margin-top: 0; color: #333;">Enter UPI Details</h5>
+                <div class="form-field">
+                    <label>UPI ID</label>
+                    <input type="text" name="upi_id" placeholder="yourname@upi">
+                </div>
+                <div class="form-field">
+                    <label>Mobile Number (Registered with UPI)</label>
+                    <input type="tel" name="upi_mobile" placeholder="9876543210" maxlength="10">
+                </div>
+            </div>
+            
+            <!-- Bank Transfer Details -->
+            <div class="payment-details" id="bank-details-extend">
+                <h5 style="margin-top: 0; color: #333;">Enter Bank Account Details</h5>
+                <div class="form-field">
+                    <label>Account Holder Name</label>
+                    <input type="text" name="bank_account_holder" placeholder="John Doe">
+                </div>
+                <div class="form-field">
+                    <label>Account Number</label>
+                    <input type="text" name="bank_account_number" placeholder="1234567890">
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>IFSC Code</label>
+                        <input type="text" name="bank_ifsc_code" placeholder="SBIN0001234" maxlength="11">
+                    </div>
+                    <div class="form-field">
+                        <label>Bank Name</label>
+                        <input type="text" name="bank_name" placeholder="State Bank of India">
+                    </div>
+                </div>
+            </div>
+            
+            <input type="hidden" name="payment_status" id="payment-status-extend" value="">
+            
+            <div class="button-group">
+                <button type="button" class="btn-pay" onclick="processPayment()">Extend Access</button>
+                <button type="button" class="btn-cancel" onclick="resetForm()">Cancel</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+    
+</div>
+
+<!-- Success Modal -->
+<div class="success-modal" id="success-modal">
+    <div class="success-content">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Payment Successful!</div>
+        <div class="success-message">
+            Your profile has been unlocked successfully.<br>
+            You can now access all features including uploading medical records and booking appointments.
+        </div>
+        {% if payment_success and payment_id %}
+        <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'patientapp:download_bill' payment_id %}" class="btn-ok" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; background-color: #27ae60; flex: 1; min-width: 150px;">
+                📥 Download Bill
+            </a>
+            <button class="btn-ok" onclick="goToProfile()" style="flex: 1; min-width: 150px;">OK - View Profile</button>
+        </div>
+        {% else %}
+        <button class="btn-ok" onclick="goToProfile()">OK - View Profile</button>
+        {% endif %}
+    </div>
+</div>
+
+{% if payment_success %}
+<script>
+window.PAYMENT_SUCCESS = true;
+</script>
+{% endif %}
+
+<script>
+// Show success modal on page load if payment was successful
+if (window.PAYMENT_SUCCESS) {
+    window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('success-modal').classList.add('active');
+    });
+}
+
+function selectPlan(cardElement, planId) {
+    // Remove selected from all cards
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Add selected to clicked card
+    cardElement.classList.add('selected');
+    document.getElementById('plan-' + planId).checked = true;
+    
+    // Show payment section
+    const paymentSection = document.getElementById('payment-section') || document.getElementById('payment-section-extend');
+    const noPlanMsg = document.getElementById('no-plan-selected') || document.getElementById('no-plan-selected-extend');
+    
+    if (paymentSection) {
+        paymentSection.style.display = 'block';
+    }
+    if (noPlanMsg) {
+        noPlanMsg.style.display = 'none';
+    }
+}
+
+function selectPaymentMethod(method) {
+    // Remove selected from all payment methods
+    document.querySelectorAll('.payment-method').forEach(pm => {
+        pm.classList.remove('selected');
+    });
+    
+    // Add selected to clicked payment method
+    const radioButton = document.getElementById('method-' + method) || document.getElementById('method-' + method + '-extend');
+    if (radioButton) {
+        radioButton.checked = true;
+        radioButton.closest('.payment-method').classList.add('selected');
+    }
+    
+    // Hide all payment details
+    document.querySelectorAll('.payment-details').forEach(pd => {
+        pd.classList.remove('active');
+    });
+    
+    // Show selected payment details
+    // Convert method to lowercase for ID matching (CARD -> card, UPI -> upi, NETBANKING -> bank)
+    let detailsKey = method.toLowerCase();
+    if (method === 'NETBANKING') {
+        detailsKey = 'bank';
+    }
+    const detailsId = detailsKey + '-details';
+    const detailsElement = document.getElementById(detailsId) || document.getElementById(detailsId + '-extend');
+    if (detailsElement) {
+        detailsElement.classList.add('active');
+    }
+}
+
+// Format card number with spaces
+document.addEventListener('DOMContentLoaded', function() {
+    const cardInputs = document.querySelectorAll('input[id*="card-number"]');
+    cardInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+    });
+    
+    // Format expiry date
+    const expiryInputs = document.querySelectorAll('input[id*="card-expiry"]');
+    expiryInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\//g, '');
+            if (value.length >= 2) {
+                e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            } else {
+                e.target.value = value;
+            }
+        });
+    });
+});
+
+function processPayment() {
+    const planId = document.querySelector('input[name="plan_id"]:checked');
+    
+    if (!planId) {
+        const noPlanMsg = document.getElementById('no-plan-selected') || document.getElementById('no-plan-selected-extend');
+        if (noPlanMsg) {
+            noPlanMsg.style.display = 'block';
+        }
+        return;
+    }
+    
+    // Set payment status to success
+    const paymentStatus = document.getElementById('payment-status') || document.getElementById('payment-status-extend');
+    if (paymentStatus) {
+        paymentStatus.value = 'success';
+    }
+    
+    // Submit form
+    const form = document.getElementById('unlock-form') || document.getElementById('unlock-form-extend');
+    if (form) {
+        form.submit();
+    }
+}
+
+function resetForm() {
+    const paymentSection = document.getElementById('payment-section') || document.getElementById('payment-section-extend');
+    const noPlanMsg = document.getElementById('no-plan-selected') || document.getElementById('no-plan-selected-extend');
+    
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    document.querySelectorAll('input[name="plan_id"]').forEach(input => {
+        input.checked = false;
+    });
+    
+    if (paymentSection) {
+        paymentSection.style.display = 'none';
+    }
+    if (noPlanMsg) {
+        noPlanMsg.style.display = 'none';
+    }
+}
+
+function goToProfile() {
+    // Redirect to patient medical records or main profile page
+    window.location.href = "{% url 'patientapp:patient_medical_records' %}";
+}
+</script>
+
+</body>
+</html>

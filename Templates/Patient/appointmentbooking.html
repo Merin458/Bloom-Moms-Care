@@ -1,0 +1,168 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+{% include 'Patient/messages.html' %}
+
+<style>
+/* Professional Medical Styling */
+
+.appointment-wrapper {
+    background: #f8f9fc;
+}
+
+.appointment-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+    font-weight: 600;
+    color: #450202;
+}
+
+.section-subtitle {
+    color: #6c757d;
+    font-size: 15px;
+}
+
+.form-control,
+.form-select {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #e0e6ed;
+    transition: all 0.3s ease;
+}
+
+textarea.form-control {
+    height: auto;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #450202;
+    box-shadow: 0 0 0 0.15rem rgba(37, 117, 252, 0.15);
+}
+
+.btn-professional {
+    background: #450202;
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 40px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-professional:hover {
+    background: #450202;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 117, 252, 0.3);
+}
+</style>
+
+<!-- Page Header with Back Button -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center mb-3 position-relative">
+            <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm position-absolute start-0">
+                ← Back
+            </a>
+            <h2 class="section-title mb-0">Schedule an Appointment</h2>
+        </div>
+        <p class="section-subtitle text-center">
+            Book a consultation with your assigned doctor quickly and securely.
+        </p>
+    </div>
+</div>
+
+
+
+<!-- Appointment Section -->
+<div class="container-xxl py-5 appointment-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+
+                <div class="appointment-card">
+
+                    
+                    {% if patient.status == 'Transferred' %}
+                    <div class="alert alert-warning text-center rounded-3">
+                        <strong>Appointment Booking Unavailable</strong><br>
+                        Your case has been transferred to another healthcare facility.<br>
+                        Please contact your new facility to schedule appointments.
+                    </div>
+                    {% elif is_locked %}
+                    <div class="alert alert-danger text-center rounded-3">
+                        <strong>Your profile is locked.</strong><br>
+                        Please unlock your profile to schedule appointments.
+                        <br>
+                        <a href="{% url 'patientapp:profile_unlock' %}" class="fw-bold text-danger">
+                            Unlock Profile
+                        </a>
+                    </div>
+                    {% else %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Assigned Doctor
+                            </label>
+                            {% if selected_doctor %}
+                                <input type="text" class="form-control" value="{{ selected_doctor.doctor_name }} — {{ selected_doctor.specialization }}" disabled>
+                                <input type="hidden" name="doctor_id" value="{{ selected_doctor.doctor_id }}">
+                            {% else %}
+                                <input type="text" class="form-control" value="No doctor assigned" disabled>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-semibold">
+                                    Appointment Date
+                                </label>
+                                <input type="date" name="appointment_date" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-semibold">
+                                    Appointment Time
+                                </label>
+                                <input type="time" name="appointment_time" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                Reason for Visit (Optional)
+                            </label>
+                            <textarea name="reason"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Briefly describe your concern..."></textarea>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn-professional">
+                                Confirm Appointment
+                            </button>
+                        </div>
+                    </form>
+
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Your request will be reviewed and confirmed by our medical team.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

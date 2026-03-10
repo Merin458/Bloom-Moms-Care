@@ -1,0 +1,69 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="container-fluid bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">Ultrasound & Diagnostic Services</h1>
+        <p class="fs-5">
+            Advanced imaging and diagnostic support for safe and healthy pregnancy care.
+        </p>
+    </div>
+</div>
+
+<!-- Service Details -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+
+            <!-- Image -->
+            <div class="col-lg-6">
+                <img src="{% static 'Patient/img/service-2.jpg' %}" 
+                     class="img-fluid rounded shadow w-100" 
+                     style="height: 420px; object-fit: cover;"
+                     alt="Ultrasound Services">
+            </div>
+
+            <!-- Content -->
+            <div class="col-lg-6">
+                <h3 class="mb-4">Comprehensive Diagnostic Support</h3>
+
+                <p>
+                    Our ultrasound and diagnostic services help monitor fetal growth, 
+                    detect abnormalities early, and ensure both mother and baby are healthy 
+                    throughout pregnancy.
+                </p>
+
+                <ul class="list-unstyled">
+                    <li>✔ First Trimester Scan</li>
+                    <li>✔ Anomaly Scan</li>
+                    <li>✔ Growth Monitoring Scans</li>
+                    <li>✔ Doppler Studies</li>
+                    <li>✔ Laboratory Testing Support</li>
+                </ul>
+
+                <p class="mt-3">
+                    We use modern imaging technology to provide accurate and safe results 
+                    under expert medical supervision.
+                </p>
+
+                <a href="{% url 'patientapp:appointmentbooking' %}" 
+                   class="btn btn-primary mt-4 px-4 py-2">
+                   Book Diagnostic Appointment
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

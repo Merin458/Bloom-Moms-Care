@@ -1,0 +1,233 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<style>
+.service-img img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+.header-bg {
+    background: url('https://images.unsplash.com/photo-1504439468489-c8920d796a29') center center/cover no-repeat;
+}
+.cta-bg {
+    background: url('https://images.unsplash.com/photo-1516069677018-378f05b27b27') center center/cover no-repeat;
+}
+.overlay-light {
+    background: rgba(255,255,255,0.85);
+}
+.overlay-dark {
+    background: rgba(0,0,0,0.6);
+}
+</style>
+
+<!-- About Header Start -->
+<div class="container-fluid py-5 mt-5 header-bg">
+    <div class="container text-center overlay-light p-4 rounded">
+        <h1 class="display-3 mb-4">About Us</h1>
+    </div>
+</div>
+<!-- About Header End -->
+
+<!-- About Bloom Moms Care Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+    <img src="https://images.pexels.com/photos/7089629/pexels-photo-7089629.jpeg" 
+         class="img-fluid rounded shadow" 
+         alt="Doctor Consulting Pregnant Woman">
+</div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                <p class="fs-5 fw-medium text-primary">About Bloom Moms Care</p>
+                <h1 class="display-6 mb-4">Dedicated to Supporting Maternal Health & Wellness</h1>
+
+                <p class="fs-5 mb-4">
+                    At Bloom Moms Care, we understand that pregnancy is a transformative journey that requires 
+                    comprehensive care, expert guidance, and compassionate support.
+                </p>
+
+                <p class="fs-5 mb-4">
+                    We combine modern technology with personalized healthcare to ensure that every mother 
+                    receives the attention and care she deserves from first trimester through delivery.
+                </p>
+
+                <ul class="list-unstyled">
+                    <li><i class="fa fa-check-circle text-primary me-2"></i> Expert Medical Team</li>
+                    <li><i class="fa fa-check-circle text-primary me-2"></i> 24/7 Support</li>
+                    <li><i class="fa fa-check-circle text-primary me-2"></i> Comprehensive Care</li>
+                    <li><i class="fa fa-check-circle text-primary me-2"></i> Digital Health Records</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+<!-- Mission & Vision Start -->
+<div class="container-xxl py-5 bg-light">
+    <div class="container">
+        <div class="row g-5">
+
+            <div class="col-lg-6">
+                <div class="bg-white rounded p-5 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fa fa-bullseye fa-3x text-primary me-3"></i>
+                        <h2 class="mb-0">Our Mission</h2>
+                    </div>
+                    <p>
+                        To provide compassionate and comprehensive maternal healthcare that empowers
+                        mothers with knowledge, support, and medical expertise for a healthy journey.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="bg-white rounded p-5 h-100 shadow-sm">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fa fa-eye fa-3x text-primary me-3"></i>
+                        <h2 class="mb-0">Our Vision</h2>
+                    </div>
+                    <p>
+                        To become a leading digital maternal healthcare platform that revolutionizes
+                        prenatal and postnatal care using innovative technology and evidence-based practice.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Mission & Vision End -->
+
+<!-- Why Choose Us Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+            <p class="fs-5 fw-medium text-primary">Why Choose Us</p>
+            <h1 class="display-6 mb-4">What Makes Bloom Moms Care Different</h1>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Card 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309" alt="Specialists">
+                    </div>
+                    <div class="p-4">
+                        <h5>Experienced Specialists</h5>
+                        <p>Board-certified obstetricians and maternal care experts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg"
+     class="img-fluid"
+     alt="Technology">
+                    </div>
+                    <div class="p-4">
+                        <h5>Advanced Technology</h5>
+                        <p>Digital pregnancy tracking and secure health records.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2" alt="Personalized Care">
+                    </div>
+                    <div class="p-4">
+                        <h5>Personalized Care</h5>
+                        <p>Customized plans tailored to each mother's needs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528" alt="Scheduling">
+                    </div>
+                    <div class="p-4">
+                        <h5>Convenient Scheduling</h5>
+                        <p>Easy online appointment booking with flexible timing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef" alt="Secure">
+                    </div>
+                    <div class="p-4">
+                        <h5>Safe & Secure</h5>
+                        <p>Encrypted medical records and protected patient data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item rounded shadow-sm">
+                    <div class="service-img rounded">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Support">
+                    </div>
+                    <div class="p-4">
+                        <h5>Holistic Support</h5>
+                        <p>Emotional guidance, nutrition advice, and wellness resources.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Why Choose Us End -->
+
+<!-- Call To Action Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="cta-bg rounded p-5 text-center overlay-dark">
+            <h2 class="text-white mb-4">Ready to Begin Your Journey With Us?</h2>
+            <p class="text-white mb-4">
+                Schedule your first appointment today and experience the Bloom Moms Care difference.
+            </p>
+            <a href="{% url 'patientapp:appointmentbooking' %}" 
+               class="btn btn-light py-3 px-5">
+               Book an Appointment
+            </a>
+        </div>
+    </div>
+</div>
+<!-- Call To Action End -->
+
+{% include 'Patient/footer.html' %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'Patient/js/main.js' %}"></script>
+
+</body>
+</html>

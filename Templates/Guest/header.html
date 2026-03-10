@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Plasery - Plastic Surgery Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'Guest/img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'Guest/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'Guest/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'Guest/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'Guest/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'Guest/css/style.css' %}" rel="stylesheet">
+    <!-- Inline override to force hero background sizing (temporary) -->
+    <style>
+        .hero-header {
+            min-height: 100vh !important;
+            height: 100vh !important;
+            background-size: cover !important;
+            background-position: left center !important;
+            background-repeat: no-repeat !important;
+        }
+        @media (max-width: 767.98px) {
+            .hero-header {
+                min-height: 60vh !important;
+                height: 60vh !important;
+                background-position: center top !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+
+    <!-- Spinner End -->
+
+
+    <!-- Topbar Start -->
+    <div class="container-fluid px-0 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-4 text-center bg-light py-3">
+                <div class="d-inline-flex align-items-center justify-content-center">
+                    <i class="bi bi-envelope fs-1 text-primary me-3"></i>
+                    <div class="text-start">
+                        <h6 class="mb-1">Email Us</h6>
+                        <span>Bloommomscare@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center bg-white border-inner py-3">
+                <div class="d-inline-flex align-items-center justify-content-center">
+                    <a href="index.html" class="navbar-brand">
+                        <h1 class="m-0 text-primary"><i class="fa fa-hospital fs-1 me-3"></i>Bloom Moms Care</h1>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center bg-light py-3">
+                <div class="d-inline-flex align-items-center justify-content-center">
+                    <i class="bi bi-phone-vibrate fs-1 text-primary me-3"></i>
+                    <div class="text-start">
+                        <h6 class="mb-1">Call Us</h6>
+                        <span>+91 9876545678 </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top py-4 px-4 px-lg-5">
+        <a href="{% url 'guestapp:guestindex' %}" class="navbar-brand d-block d-lg-none">
+            <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-hospital fs-1 me-3"></i>Bloom Moms Care</h1>
+        </a>
+        <div class="d-none d-lg-flex w-25"></div>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav mx-auto bg-light py-3 py-lg-0 px-3">
+                <a href="{% url 'guestapp:guestindex' %}" class="nav-item nav-link active">Home</a>
+                <a href="{% url 'guestapp:about_us' %}" class="nav-item nav-link">About Us</a>
+                <a href="{% url 'guestapp:guestindex' %}#services" class="nav-item nav-link">Our Services</a>
+                
+                <a href="{% url 'guestapp:contact' %}" class="nav-item nav-link">Contact Us</a>
+            </div>
+        </div>
+        <div class="d-none d-lg-block w-25 text-end"></div>
+    </nav>
+    <!-- Navbar End -->

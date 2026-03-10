@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Basic Information - Bloom Moms Care</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #36b9cc;
+            --light-bg: #e3f2fd;
+            --dark-text: #333;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Back Button */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+        }
+        
+        /* Patient Info Card */
+        .info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .info-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+        
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .info-field {
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+        }
+        
+        .info-field label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-field value {
+            display: block;
+            color: var(--dark-text);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* Patient Avatar Section */
+        .patient-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+        
+        .patient-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .patient-header-text h2 {
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        
+        .patient-header-text p {
+            color: var(--dark-text);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .status-badge.active {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-badge.high-risk {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-custom {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            justify-content: center;
+            min-width: 150px;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background-color: #f5f5f5;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-secondary-custom:hover {
+            background-color: var(--light-bg);
+        }
+        
+        /* Alert Box */
+        .alert-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .alert-box strong {
+            color: #ff6f00;
+        }
+    </style>
+</head>
+<body>
+    {% include 'Doctor/header.html' %}
+
+    <div class="container-fluid px-4">
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="back-link">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+        
+        <!-- Patient Header Section -->
+        <div class="info-card">
+            <div class="patient-header">
+                {% if patient.image %}
+                    <img src="{{ patient.image.url }}" alt="{{ patient.patient_name }}" class="patient-avatar">
+                {% else %}
+                    <div class="patient-avatar d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%); color: white; font-size: 2rem;">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="patient-header-text">
+                    <h2>{{ patient.patient_name }}</h2>
+                    <p><i class="fas fa-phone me-2"></i><strong>Contact:</strong> {{ patient.phone|default:"Not provided" }}</p>
+                    <p><i class="fas fa-pregnancy-woman me-2"></i><strong>Trimester:</strong> 
+                        {% if patient.current_trimester %}
+                            Trimester {{ patient.current_trimester }}
+                        {% else %}
+                            Not specified
+                        {% endif %}
+                    </p>
+                    <p><i class="fas fa-birthday-cake me-2"></i><strong>Age:</strong> {{ patient.age }} years</p>
+                    <span class="status-badge active">
+                        <i class="fas fa-check-circle me-1"></i>Active Patient
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="info-card">
+            <h5><i class="fas fa-user me-2"></i>Personal Information</h5>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Patient ID</label>
+                    <value>{{ patient.patient_id }}</value>
+                </div>
+                <div class="info-field">
+                    <label>Age</label>
+                    <value>{{ patient.age }} years</value>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Phone Number</label>
+                    <value>{{ patient.phone|default:"Not provided" }}</value>
+                </div>
+                <div class="info-field">
+                    <label>Email Address</label>
+                    <value>{{ patient.email|default:"Not provided" }}</value>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Address</label>
+                    <value>{{ patient.address|default:"Not provided" }}</value>
+                </div>
+                <div class="info-field">
+                    <label>Blood Group</label>
+                    <value>{{ patient.blood_group|default:"Not specified" }}</value>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maternity Information -->
+        <div class="info-card">
+            <h5><i class="fas fa-pregnancy-woman me-2"></i>Maternity Information</h5>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Current Trimester</label>
+                    <value>
+                        {% if patient.current_trimester %}
+                            <span class="badge bg-primary">Trimester {{ patient.current_trimester }}</span>
+                        {% else %}
+                            Not specified
+                        {% endif %}
+                    </value>
+                </div>
+                <div class="info-field">
+                    <label>Current Month</label>
+                    <value>
+                        {% if current_month %}
+                            {{ current_month }} months
+                        {% else %}
+                            Not calculated
+                        {% endif %}
+                    </value>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Expected Delivery Date (EDD)</label>
+                    <value>{{ patient.edd_date|default:"Not specified" }}</value>
+                </div>
+                <div class="info-field">
+                    <label>LMP (Last Menstrual Period)</label>
+                    <value>{{ patient.last_cycle_date|default:"Not specified" }}</value>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Information -->
+        <div class="info-card">
+            <h5><i class="fas fa-stethoscope me-2"></i>Assigned Doctor</h5>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Doctor Name</label>
+                    <value>
+                        {% if patient.doctor_id %}
+                            Dr. {{ patient.doctor_id.doctor_name }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </value>
+                </div>
+                <div class="info-field">
+                    <label>Specialization</label>
+                    <value>
+                        {% if patient.doctor_id %}
+                            {{ patient.doctor_id.specialization|default:"General Practitioner" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </value>
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-field">
+                    <label>Doctor Contact</label>
+                    <value>
+                        {% if patient.doctor_id %}
+                            {{ patient.doctor_id.phone|default:"Not provided" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </value>
+                </div>
+                <div class="info-field">
+                    <label>Doctor Email</label>
+                    <value>
+                        {% if patient.doctor_id %}
+                            {{ patient.doctor_id.email|default:"Not provided" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </value>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical History -->
+        {% if patient.medical_history or patient.allergies %}
+        <div class="info-card">
+            <h5><i class="fas fa-notes-medical me-2"></i>Medical History</h5>
+            
+            {% if patient.medical_history %}
+            <div class="alert-box">
+                <strong>Medical History:</strong>
+                <p class="mt-2 mb-0">{{ patient.medical_history }}</p>
+            </div>
+            {% endif %}
+            
+            {% if patient.allergies %}
+            <div class="alert-box" style="border-left-color: #f44336; background-color: #ffebee;">
+                <strong style="color: #f44336;">Known Allergies:</strong>
+                <p class="mt-2 mb-0">{{ patient.allergies }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="info-card">
+            <div class="action-buttons">
+                <a href="{% url 'doctorapp:patient_profile' patient.patient_id %}" class="btn-custom btn-primary-custom">
+                    <i class="fas fa-folder-open"></i>
+                    <span>View Full Profile</span>
+                </a>
+                <a href="{% url 'doctorapp:doctor_patients' %}" class="btn-custom btn-secondary-custom">
+                    <i class="fas fa-list"></i>
+                    <span>Back to Patients</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% include 'Doctor/Footer.html' %}
+
+</body>
+</html>

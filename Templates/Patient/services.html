@@ -1,0 +1,174 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+
+<!-- Back Button -->
+<div class="container-fluid bg-light" style="padding: 10px 0;">
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
+
+<style>
+.service-img img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+}
+.header-bg {
+    background: url('https://images.pexels.com/photos/7089401/pexels-photo-7089401.jpeg') center center/cover no-repeat;
+}
+.overlay-light {
+    background: rgba(255,255,255,0.85);
+}
+.cta-bg {
+    background: url('https://images.pexels.com/photos/3768916/pexels-photo-3768916.jpeg') center center/cover no-repeat;
+}
+.overlay-dark {
+    background: rgba(0,0,0,0.6);
+}
+</style>
+
+<!-- Header Start -->
+<div class="container-fluid py-5 mt-5 header-bg">
+    <div class="container text-center overlay-light p-4 rounded">
+        <h1 class="display-3 mb-3">Our Services</h1>
+        <p class="fs-5">Comprehensive maternal healthcare services tailored for you</p>
+    </div>
+</div>
+<!-- Header End -->
+
+<div class="container-fluid bg-light py-5 mt-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-5 mb-5">Explore Our Maternal Care Services</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon1.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Antenatal Care</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:antenatalcare' %}">Read More 
+                                    <i class="fa fa-arrow-right ms-1"></i></a>
+                                      
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-1.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon2.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3> Ultrasound & Diagnostic Services </h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:ultrasound' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-2.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon3.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Doctor Consultation & Appointment Booking</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:consultation' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-3.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon4.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Trimester Monitoring & Health Tracking</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:trimestermonitor' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-4.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon5.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Nutrition & Pregnancy Care Guidance</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:nutritioncare' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-5.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Patient/img/icon6.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Safe Delivery & Postnatal Care</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'patientapp:safedelivery' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Patient/img/service-6.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+<!-- Call To Action -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="cta-bg rounded p-5 text-center overlay-dark">
+            <h2 class="text-white mb-4">Experience Complete Maternal Care</h2>
+            <p class="text-white mb-4">Book your consultation today and begin your healthy pregnancy journey.</p>
+            <a href="{% url 'patientapp:appointmentbooking' %}" class="btn btn-light py-3 px-5">
+                Book an Appointment
+            </a>
+        </div>
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}
+
+<script src="{% static 'Patient/js/main.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% load static %}
+{% include 'Patient/header.html' %}
+{% include 'Patient/messages.html' %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-primary btn-sm">
+                ← Back
+            </a>
+        </div>
+
+        <!-- Patient Profile Card -->
+        <div class="card border-0 shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Patient Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+
+                    <div class="col-md-2 text-center mb-3 mb-md-0">
+                        {% if patient.image %}
+                            <img src="{{ patient.image.url }}"
+                                 class="rounded-circle"
+                                 width="100" height="100"
+                                 style="object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'default_profile.png' %}"
+                                 class="rounded-circle"
+                                 width="100" height="100">
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-10">
+                        <h4 class="text-primary">{{ patient.name }}</h4>
+                        <p class="mb-1"><strong>Age:</strong> {{ patient.age }}</p>
+                        <p class="mb-1"><strong>Phone:</strong> {{ patient.phone }}</p>
+                        <p><strong>Email:</strong> {{ patient.email }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Visit History Table -->
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Visit History</h5>
+            </div>
+
+            <div class="card-body">
+                {% if visit_history %}
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Visit Date</th>
+                                <th>Weight (kg)</th>
+                                <th>BP</th>
+                                <th>Health Status</th>
+                                <th>Doctor Notes</th>
+                                <th>Next Visit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visit in visit_history %}
+                            <tr>
+                                <td>{{ visit.visit_date }}</td>
+                                <td>{{ visit.weight }}</td>
+                                <td>{{ visit.blood_pressure }}</td>
+                                <td>{{ visit.health_status }}</td>
+                                <td>{{ visit.details }}</td>
+                                <td>{{ visit.next_visit_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p class="text-muted">No visit history available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% include 'Patient/footer.html' %}

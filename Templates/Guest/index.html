@@ -1,0 +1,335 @@
+{% load static %}
+{% include 'Guest/header.html' %}
+
+<style>
+/* ===== Hero Button Styling ===== */
+.hero-btn {
+    background: linear-gradient(45deg, #781c03, #781c03);
+    color: #fff !important;
+    border: none;
+    border-radius: 40px;
+    padding: 14px 28px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(255, 111, 97, 0.3);
+    text-align: center;
+}
+
+.hero-btn:hover {
+    background: linear-gradient(45deg, #941105, #941105);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(255, 111, 97, 0.4);
+}
+
+.hero-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+}
+</style>
+
+    <div class="container-fluid bg-primary py-5 mb-5 hero-header wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row justify-content-start">
+                <div class="col-lg-8 text-center text-lg-start">
+                    <p class="fs-4 text-primary mb-4">Welcome to Bloom Moms</p>
+                    <h1 class="display-1 mb-4">Caring for You & Your Baby</h1>
+                    <p class="fs-4 text-dark">Every Step of the Way</p>
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start pt-5 gap-3">
+                        <a href="{% url 'guestapp:login' %}" class="hero-btn py-3 px-5">
+                            <i class="fa fa-sign-in-alt me-2"></i>Login
+                        </a>
+                        <a href="{% url 'guestapp:contact' %}" class="hero-btn py-3 px-5">
+                            <i class="fa fa-phone me-2"></i>Contact Us
+                        </a>
+                        <a href="{% url 'guestapp:about_us' %}" class="hero-btn py-3 px-5">
+                            <i class="fa fa-info-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero End -->
+
+
+    <!-- Video Modal Start -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Youtube Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 16:9 aspect ratio -->
+                    <div class="ratio ratio-16x9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowfullscreen
+                            allowscriptaccess="always" allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Video Modal End -->
+
+
+    <!-- About Start -->
+    <div class="container-xxl py-5" id="about">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative overflow-hidden pt-5 h-100" style="min-height: 400px;">
+                        <img class="position-absolute w-100 h-100" src="{% static 'Guest/img/abt.jpg' %}" alt=""
+                            style="object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 bg-white ps-3 pb-3"
+                            style="width: 200px; height: 200px;">
+                            <div class="d-flex flex-column justify-content-center text-center bg-primary h-100 p-3">
+                                <h1 class="text-white mb-0" data-toggle="counter-up">25</h1>
+                                <h3 class="">Years</h3>
+                                <h6 class="mb-0">Experience</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="h-100">
+                        <h1 class="display-5 mb-5">Compassionate Maternal Care You Can Trust</h1>
+                        <p class="fs-4 text-primary mb-4">We provide comprehensive pregnancy and maternity services with medical expertise, compassion, and personalized care for every mother.</p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 btn-lg-square bg-light text-primary me-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="fa fa-user-md fa-2x"></i>
+                                    </div>
+                                    <h5 class="mb-0">Experienced Medical Team</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 btn-lg-square bg-light text-primary me-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="fa fa-heartbeat fa-2x"></i>
+                                    </div>
+                                    <h5 class="mb-0">Safe & Advanced Care</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-4">At Bloom Moms Care, we support mothers throughout their pregnancy journey — from antenatal checkups and trimester monitoring to safe delivery and postnatal care. Our goal is to ensure the health, comfort, and confidence of every mother.</p>
+                        
+                        <div class="d-flex flex-wrap gap-3 mb-4">
+                            <a href="{% url 'guestapp:login' %}" class="btn btn-primary px-4 py-2">
+                                <i class="fa fa-calendar-check me-2"></i>Get Started
+                            </a>
+                            <a href="{% url 'guestapp:guestindex' %}#services" class="btn btn-outline-primary px-4 py-2">
+                                <i class="fa fa-list me-2"></i>View Services
+                            </a>
+                        </div>
+                        
+                        <div class="border-top mt-4 pt-4">
+                            <div class="d-flex align-items-center">
+                                <img class="flex-shrink-0 me-3" src="{% static 'Guest/img/profile.jpg' %}" alt="">
+                                <h5 class="mb-0">Call Us: +91 98765 43210</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    
+
+
+    <!-- Service Start -->
+    <div class="container-fluid bg-light py-5 mt-5" id="services">
+        <div class="container py-5">
+            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 700px;">
+                <h1 class="display-5 mb-5">Explore Our Maternal Care Services</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon1.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Antenatal Care</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:antenatalcare' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-1.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon2.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Ultrasound & Diagnostic Services</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:ultrasound' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-2.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon3.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Doctor Consultation & Appointment Booking</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:consultation' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-3.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon4.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Trimester Monitoring & Health Tracking</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:trimestermonitor' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-4.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon5.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Nutrition & Pregnancy Care Guidance</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:nutritioncare' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-5.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item bg-white h-100 p-4">
+                        <div class="d-flex ms-n4 mb-4">
+                            <div class="service-icon flex-shrink-0 bg-light me-4">
+                                <img class="img-fluid" src="{% static 'Guest/img/icon6.png' %}" alt="">
+                            </div>
+                            <div class="service-text">
+                                <h3>Safe Delivery & Postnatal Care</h3>
+                                <a class="btn btn-sm btn-outline-primary px-3 mt-auto" href="{% url 'guestapp:safedelivery' %}">Read More <i
+                                        class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden">
+                            <img class="img-fluid service-img w-100" src="{% static 'Guest/img/service-6.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+    <!-- Testimonial Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-5">What Our Clients Say!</h1>
+            </div>
+            <div class="row g-5">
+                <div class="col-lg-3 d-none d-lg-block wow fadeIn" data-wow-delay="0.5s">
+                    <div class="testimonial-left h-100">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-1.jpg' %}" alt="">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-2.jpg' %}" alt="">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-3.jpg' %}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="owl-carousel testimonial-carousel">
+                        <div class="testimonial-item text-center">
+                            <img class="img-fluid rounded mx-auto mb-4" src="{% static 'Patient/img/testimonial-1.jpg' %}" alt="">
+                            <p class="fs-5">“Bloom Moms Care supported me throughout my pregnancy journey. The doctors were patient, kind, and always explained everything clearly. I felt safe and confident at every appointment.”
+                            </p>
+                            <h4>Ananya</h4>
+                            <span>2022</span>
+                        </div>
+                        <div class="testimonial-item text-center">
+                            <img class="img-fluid rounded mx-auto mb-4" src="{% static 'Patient/img/testimonial-2.jpg' %}" alt="">
+                            <p class="fs-5">“From trimester check-ups to delivery guidance, the care I received was exceptional. The staff made me feel comfortable and cared for like family.”                  </p>
+                            <h4>Olivia </h4>
+                            <span>2023</span>
+                        </div>
+                        <div class="testimonial-item text-center">
+                            <img class="img-fluid rounded mx-auto mb-4" src="{% static 'Patient/img/testimonial-3.jpg' %}" alt="">
+                            <p class="fs-5">"The online appointment system is very convenient and easy to use. My doctor was always approachable and attentive to my concerns.”
+                            </p>
+                            <h4>Ava Brown</h4>
+                            <span>2024</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 d-none d-lg-block wow fadeIn" data-wow-delay="0.5s">
+                    <div class="testimonial-right h-100">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-1.jpg' %}" alt="">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-2.jpg' %}" alt="">
+                        <img class="img-fluid" src="{% static 'Patient/img/testimonial-3.jpg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Testimonial End -->
+
+
+    <!-- Instagram Start -->
+    <div class="container-fluid position-relative instagram p-0 mt-5">
+        
+        <div class="row g-0">
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.1s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-1.jpg' %}" alt="">
+            </div>
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.2s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-2.jpg' %}" alt="">
+            </div>
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.3s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-3.jpg' %}" alt="">
+            </div>
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.4s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-4.jpg' %}" alt="">
+            </div>
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.5s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-5.jpg' %}" alt="">
+            </div>
+            <div class="col-4 col-md-2 wow fadeIn" data-wow-delay="0.6s">
+                <img class="img-fluid w-100" src="{% static 'Patient/img/insta-6.jpg' %}" alt="">
+            </div>
+        </div>
+    </div>
+{% include 'Guest/footer.html' %}

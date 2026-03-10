@@ -1,0 +1,66 @@
+{% load static %}
+{% include 'Admin/header.html' %}
+
+<style>
+    .unread-notification {
+        background-color: #f0f7ff;
+    }
+</style>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Notifications</h4>
+                        <p class="text-muted mb-0">System and user activity notifications</p>
+                    </div>
+                    <div class="card-body">
+                        {% if notifications %}
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <h6>Unread: <span class="badge badge-danger">{{ unread_count }}</span></h6>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    {% if unread_count > 0 %}
+                                        <a href="{% url 'notificationapp:mark_all_read' 'Admin' %}" class="btn btn-primary btn-sm">
+                                            Mark all as read
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        {% for notif in notifications %}
+                                            <tr {% if not notif.is_read %}class="unread-notification"{% endif %}>
+                                                <td>
+                                                    <a href="{% url 'notificationapp:mark_as_read' notif.id %}" style="text-decoration: none; color: inherit;">
+                                                        <i class="ti-bell text-info"></i>
+                                                        <span>{{ notif.message }}</span>
+                                                        {% if not notif.is_read %}
+                                                            <span class="badge badge-danger float-right">New</span>
+                                                        {% endif %}
+                                                    </a>
+                                                    <br>
+                                                    <small class="text-muted">{{ notif.created_at|date:"M d, Y H:i" }}</small>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="ti-info-alt"></i> No notifications yet.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
