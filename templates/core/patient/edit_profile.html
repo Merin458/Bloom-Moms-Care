@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile – Patient{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_prescriptions' %}"><i class="bi bi-capsule"></i> Prescriptions</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_medical_records' %}"><i class="bi bi-clipboard2-pulse"></i> Medical Records</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_trimester_tracking' %}"><i class="bi bi-activity"></i> Trimester</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'patient_edit_profile' %}"><i class="bi bi-person-gear"></i> My Profile</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-9">
+    <h3 class="page-title mb-4"><i class="bi bi-person-gear"></i> Edit My Profile</h3>
+    <div class="card">
+      <div class="card-header">Personal & Pregnancy Details</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Date of Birth</label>
+              {{ form.date_of_birth }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Blood Group</label>
+              {{ form.blood_group }}
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Address</label>
+              {{ form.address }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Emergency Contact Name</label>
+              {{ form.emergency_contact_name }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Emergency Contact Phone</label>
+              {{ form.emergency_contact_phone }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Last Menstrual Period (LMP)</label>
+              {{ form.last_menstrual_period }}
+              <div class="form-text">Used to calculate your trimester and due date.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Expected Due Date</label>
+              {{ form.due_date }}
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Assigned Doctor</label>
+              {{ form.assigned_doctor }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Allergies</label>
+              {{ form.allergies }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Medical History</label>
+              {{ form.medical_history }}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-save"></i> Save Profile</button>
+          <a href="{% url 'patient_dashboard' %}" class="btn btn-secondary mt-3 ms-2">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

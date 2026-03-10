@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Manage Doctors – Bloom Moms Care{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <div class="text-center mb-3">
+    <span class="badge bg-danger fs-6 px-3 py-2"><i class="bi bi-shield-lock"></i> Admin</span>
+  </div>
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'admin_manage_doctors' %}"><i class="bi bi-person-badge"></i> Doctors</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'admin_manage_patients' %}"><i class="bi bi-people"></i> Patients</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'admin_view_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item mt-3"><a class="nav-link" href="/admin/"><i class="bi bi-gear"></i> Django Admin</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="page-title mb-0"><i class="bi bi-person-badge"></i> Manage Doctors</h3>
+  <a href="{% url 'admin_add_doctor' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Doctor</a>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Specialization</th>
+            <th>Experience</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doctor in doctors %}
+          <tr>
+            <td>
+              <div class="fw-semibold">Dr. {{ doctor.user.get_full_name }}</div>
+              <div class="text-muted small">{{ doctor.user.email }}</div>
+            </td>
+            <td>{{ doctor.user.username }}</td>
+            <td>{{ doctor.get_specialization_display }}</td>
+            <td>{{ doctor.experience_years }} yrs</td>
+            <td>
+              {% if doctor.is_available %}
+                <span class="badge bg-success">Active</span>
+              {% else %}
+                <span class="badge bg-secondary">Inactive</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'admin_toggle_doctor' doctor.pk %}" class="btn btn-sm {% if doctor.is_available %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+                {% if doctor.is_available %}<i class="bi bi-toggle-on"></i> Deactivate{% else %}<i class="bi bi-toggle-off"></i> Activate{% endif %}
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted py-3">No doctors registered yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

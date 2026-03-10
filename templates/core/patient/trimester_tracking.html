@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Trimester Tracking – Patient{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_prescriptions' %}"><i class="bi bi-capsule"></i> Prescriptions</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_medical_records' %}"><i class="bi bi-clipboard2-pulse"></i> Medical Records</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'patient_trimester_tracking' %}"><i class="bi bi-activity"></i> Trimester</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_edit_profile' %}"><i class="bi bi-person-gear"></i> My Profile</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title mb-4"><i class="bi bi-activity"></i> Trimester Tracking</h3>
+
+{% if trimester %}
+<div class="alert" style="background:#f8d7ea;border-color:#e83e8c;">
+  <i class="bi bi-heart-pulse-fill text-danger"></i>
+  Currently in <strong>Trimester {{ trimester }}</strong> — Week <strong>{{ weeks_pregnant }}</strong>
+</div>
+{% endif %}
+
+<div class="row g-4">
+  <!-- Log New Entry -->
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-plus-circle"></i> Log New Entry</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Trimester</label>
+            {{ form.trimester }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Week Number</label>
+            {{ form.week_number }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Symptoms</label>
+            {{ form.symptoms }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Notes</label>
+            {{ form.notes }}
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-check-circle"></i> Save Entry
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Previous Entries -->
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-clock-history"></i> Tracking History</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr><th>Date</th><th>Trimester</th><th>Week</th><th>Symptoms</th></tr>
+            </thead>
+            <tbody>
+              {% for entry in trackings %}
+              <tr>
+                <td>{{ entry.date_recorded }}</td>
+                <td>
+                  <span class="badge bg-secondary">T{{ entry.trimester }}</span>
+                </td>
+                <td>W{{ entry.week_number }}</td>
+                <td class="text-muted small">{{ entry.symptoms|truncatechars:50|default:"—" }}</td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center text-muted py-3">No entries yet. Start logging above!</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

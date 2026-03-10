@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}My Prescriptions – Patient{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'patient_prescriptions' %}"><i class="bi bi-capsule"></i> Prescriptions</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_medical_records' %}"><i class="bi bi-clipboard2-pulse"></i> Medical Records</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_trimester_tracking' %}"><i class="bi bi-activity"></i> Trimester</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_edit_profile' %}"><i class="bi bi-person-gear"></i> My Profile</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-title mb-4"><i class="bi bi-capsule"></i> My Prescriptions</h3>
+
+{% for rx in prescriptions %}
+<div class="card mb-3">
+  <div class="card-header d-flex justify-content-between">
+    <span><i class="bi bi-person-badge"></i> Dr. {{ rx.doctor.user.get_full_name }}</span>
+    <span class="text-light small">Issued: {{ rx.issued_date }}</span>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-8">
+        <h6 class="fw-semibold">Medications</h6>
+        <pre class="text-wrap bg-light p-2 rounded">{{ rx.medications }}</pre>
+        {% if rx.instructions %}
+        <h6 class="fw-semibold mt-3">Instructions</h6>
+        <p>{{ rx.instructions }}</p>
+        {% endif %}
+        {% if rx.dietary_advice %}
+        <h6 class="fw-semibold mt-2">Dietary Advice</h6>
+        <p>{{ rx.dietary_advice }}</p>
+        {% endif %}
+      </div>
+      <div class="col-md-4">
+        {% if rx.follow_up_date %}
+        <div class="alert alert-info">
+          <i class="bi bi-calendar-event"></i><br>
+          <strong>Follow-up Date</strong><br>{{ rx.follow_up_date }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% empty %}
+<div class="alert alert-info">No prescriptions issued yet. Please book an appointment with your doctor.</div>
+{% endfor %}
+{% endblock %}

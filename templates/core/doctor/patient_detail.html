@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Patient Detail – Doctor{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'doctor_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'doctor_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'doctor_patients' %}"><i class="bi bi-people"></i> My Patients</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="page-title mb-0"><i class="bi bi-person-lines-fill"></i> {{ patient.user.get_full_name }}</h3>
+  <a href="{% url 'doctor_patients' %}" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+
+<!-- Patient Info -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">Patient Info</div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-6">Phone:</dt><dd class="col-6">{{ patient.user.phone|default:"—" }}</dd>
+          <dt class="col-6">Blood Group:</dt><dd class="col-6">{{ patient.blood_group|default:"—" }}</dd>
+          <dt class="col-6">LMP:</dt><dd class="col-6">{{ patient.last_menstrual_period|default:"—" }}</dd>
+          <dt class="col-6">Due Date:</dt><dd class="col-6">{{ patient.due_date|default:"—" }}</dd>
+          <dt class="col-6">Trimester:</dt><dd class="col-6">{{ patient.get_trimester|default:"—" }}</dd>
+          <dt class="col-6">Week:</dt><dd class="col-6">{{ patient.get_weeks_pregnant|default:"—" }}</dd>
+          <dt class="col-6">Allergies:</dt><dd class="col-6">{{ patient.allergies|default:"None" }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card h-100">
+      <div class="card-header">Quick Actions</div>
+      <div class="card-body d-flex flex-wrap gap-2 align-items-start">
+        <a href="{% url 'doctor_add_prescription' patient.pk %}" class="btn btn-primary">
+          <i class="bi bi-capsule"></i> Add Prescription
+        </a>
+        <a href="{% url 'doctor_add_medical_record' patient.pk %}" class="btn btn-primary">
+          <i class="bi bi-clipboard2-pulse"></i> Add Medical Record
+        </a>
+        <a href="{% url 'doctor_add_trimester_tracking' patient.pk %}" class="btn btn-primary">
+          <i class="bi bi-activity"></i> Add Trimester Tracking
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Appointments -->
+<div class="card mb-4">
+  <div class="card-header"><i class="bi bi-calendar2"></i> Appointments</div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light"><tr><th>Date</th><th>Time</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          {% for appt in appointments %}
+          <tr>
+            <td>{{ appt.appointment_date }}</td>
+            <td>{{ appt.appointment_time|time:"H:i" }}</td>
+            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+            <td class="text-muted small">{{ appt.notes|truncatechars:40|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted py-2">No appointments yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Prescriptions -->
+<div class="card mb-4">
+  <div class="card-header"><i class="bi bi-capsule"></i> Prescriptions</div>
+  <div class="card-body">
+    {% for rx in prescriptions %}
+    <div class="border rounded p-3 mb-3">
+      <div class="d-flex justify-content-between">
+        <strong>Issued: {{ rx.issued_date }}</strong>
+        {% if rx.follow_up_date %}<span class="text-muted small">Follow-up: {{ rx.follow_up_date }}</span>{% endif %}
+      </div>
+      <div class="mt-2"><strong>Medications:</strong><pre class="mb-0 mt-1 text-wrap">{{ rx.medications }}</pre></div>
+      {% if rx.instructions %}<div class="mt-2 text-muted small"><strong>Instructions:</strong> {{ rx.instructions }}</div>{% endif %}
+    </div>
+    {% empty %}
+    <p class="text-muted mb-0">No prescriptions yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Medical Records -->
+<div class="card mb-4">
+  <div class="card-header"><i class="bi bi-clipboard2-pulse"></i> Medical Records</div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light"><tr><th>Date</th><th>Diagnosis</th><th>BP</th><th>Weight</th><th>FHR</th></tr></thead>
+        <tbody>
+          {% for rec in medical_records %}
+          <tr>
+            <td>{{ rec.record_date }}</td>
+            <td>{{ rec.diagnosis|truncatechars:40 }}</td>
+            <td>{{ rec.blood_pressure|default:"—" }}</td>
+            <td>{{ rec.weight_kg|default:"—" }} {% if rec.weight_kg %}kg{% endif %}</td>
+            <td>{{ rec.fetal_heart_rate|default:"—" }} {% if rec.fetal_heart_rate %}bpm{% endif %}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-2">No records yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Trimester Tracking -->
+<div class="card mb-4">
+  <div class="card-header"><i class="bi bi-activity"></i> Trimester Tracking</div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light"><tr><th>Date</th><th>Trimester</th><th>Week</th><th>Symptoms</th></tr></thead>
+        <tbody>
+          {% for tr in trimester_trackings %}
+          <tr>
+            <td>{{ tr.date_recorded }}</td>
+            <td>{{ tr.trimester }}</td>
+            <td>{{ tr.week_number }}</td>
+            <td class="text-muted small">{{ tr.symptoms|truncatechars:50|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted py-2">No tracking entries yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
