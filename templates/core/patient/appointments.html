@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}My Appointments – Patient{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'patient_appointments' %}"><i class="bi bi-calendar2-check"></i> Appointments</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_prescriptions' %}"><i class="bi bi-capsule"></i> Prescriptions</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_medical_records' %}"><i class="bi bi-clipboard2-pulse"></i> Medical Records</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_trimester_tracking' %}"><i class="bi bi-activity"></i> Trimester</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'patient_edit_profile' %}"><i class="bi bi-person-gear"></i> My Profile</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="page-title mb-0"><i class="bi bi-calendar2-check"></i> My Appointments</h3>
+  <a href="{% url 'patient_book_appointment' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Book New</a>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for appt in appointments %}
+          <tr>
+            <td>Dr. {{ appt.doctor.user.get_full_name }}</td>
+            <td>{{ appt.appointment_date }}</td>
+            <td>{{ appt.appointment_time|time:"H:i" }}</td>
+            <td class="text-muted small">{{ appt.reason|truncatechars:40|default:"—" }}</td>
+            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+            <td>
+              {% if appt.status in "pending confirmed" %}
+              <a href="{% url 'patient_cancel_appointment' appt.pk %}"
+                 class="btn btn-sm btn-outline-danger"
+                 onclick="return confirm('Cancel this appointment?')">
+                <i class="bi bi-x-circle"></i> Cancel
+              </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted py-3">No appointments yet. <a href="{% url 'patient_book_appointment' %}">Book one now!</a></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

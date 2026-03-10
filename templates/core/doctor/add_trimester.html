@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Add Trimester Tracking – Doctor{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 sidebar py-3 px-2">
+  <ul class="nav flex-column">
+    <li class="nav-item"><a class="nav-link" href="{% url 'doctor_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{% url 'doctor_patients' %}"><i class="bi bi-people"></i> My Patients</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="page-title mb-0"><i class="bi bi-activity"></i> Add Trimester Tracking</h3>
+      <a href="{% url 'doctor_patient_detail' patient.pk %}" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back</a>
+    </div>
+    <div class="alert alert-info">
+      <i class="bi bi-person"></i> Patient: <strong>{{ patient.user.get_full_name }}</strong>
+    </div>
+    <div class="card">
+      <div class="card-header">Trimester Entry</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Trimester</label>
+              {{ form.trimester }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Week Number</label>
+              {{ form.week_number }}
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Symptoms</label>
+              {{ form.symptoms }}
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Notes</label>
+              {{ form.notes }}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-check-circle"></i> Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
