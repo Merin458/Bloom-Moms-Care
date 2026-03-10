@@ -1,0 +1,146 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Patient Detail{% endblock %}
+{% block page_title %}Patient: {{ patient }}{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header"><i class="fas fa-user me-2"></i>Patient Profile</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-5">Name</dt>
+                    <dd class="col-7">{{ patient }}</dd>
+                    <dt class="col-5">Username</dt>
+                    <dd class="col-7">{{ patient.user.username }}</dd>
+                    <dt class="col-5">Email</dt>
+                    <dd class="col-7">{{ patient.user.email|default:"-" }}</dd>
+                    <dt class="col-5">Phone</dt>
+                    <dd class="col-7">{{ patient.user.phone|default:"-" }}</dd>
+                    <dt class="col-5">Age</dt>
+                    <dd class="col-7">{{ patient.age|default:"-" }}</dd>
+                    <dt class="col-5">Blood Group</dt>
+                    <dd class="col-7">{{ patient.get_blood_group_display }}</dd>
+                    <dt class="col-5">Doctor</dt>
+                    <dd class="col-7">{{ patient.assigned_doctor|default:"Not assigned" }}</dd>
+                    <dt class="col-5">EDD</dt>
+                    <dd class="col-7">{{ patient.expected_delivery_date|default:"-" }}</dd>
+                    <dt class="col-5">Status</dt>
+                    <dd class="col-7">
+                        {% if patient.is_locked %}
+                            <span class="locked-badge"><i class="fas fa-lock me-1"></i>Locked</span>
+                        {% else %}
+                            <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+                <div class="mt-3 d-flex gap-2">
+                    <a href="{% url 'admin_edit_patient' patient.pk %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'admin_upload_report' %}?patient={{ patient.pk }}" class="btn btn-sm btn-outline-success">
+                        <i class="fas fa-upload"></i> Upload Report
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <!-- Appointments -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-calendar me-2"></i>Appointments</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Doctor</th><th>Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for a in appointments %}
+                        <tr>
+                            <td>{{ a.doctor }}</td>
+                            <td>{{ a.requested_date }}</td>
+                            <td><span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-2">None</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Trimester Updates -->
+        <div class="card mb-3">
+            <div class="card-header"><i class="fas fa-baby me-2"></i>Trimester Updates</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Trimester</th><th>Doctor</th><th>Date</th><th>Notes</th></tr></thead>
+                    <tbody>
+                    {% for t in trimester_updates %}
+                        <tr>
+                            <td>{{ t.get_trimester_number_display }}</td>
+                            <td>{{ t.doctor }}</td>
+                            <td>{{ t.date_recorded }}</td>
+                            <td>{{ t.health_notes|truncatechars:50 }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-2">None</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Prescriptions -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-prescription-bottle-alt me-2"></i>Prescriptions</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Title</th><th>Doctor</th><th>Date</th></tr></thead>
+                    <tbody>
+                    {% for p in prescriptions %}
+                        <tr>
+                            <td>{{ p.title }}</td>
+                            <td>{{ p.doctor }}</td>
+                            <td>{{ p.date_prescribed }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-2">None</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Medical Reports -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-file-medical me-2"></i>Medical Reports</span>
+                <a href="{% url 'admin_upload_report' %}" class="btn btn-sm btn-outline-success">
+                    <i class="fas fa-plus"></i> Upload
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Type</th><th>Title</th><th>Date</th><th>File</th></tr></thead>
+                    <tbody>
+                    {% for r in reports %}
+                        <tr>
+                            <td>{{ r.get_report_type_display }}</td>
+                            <td>{{ r.title }}</td>
+                            <td>{{ r.report_date }}</td>
+                            <td><a href="{{ r.report_file.url }}" target="_blank"><i class="fas fa-download"></i></a></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-2">None</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

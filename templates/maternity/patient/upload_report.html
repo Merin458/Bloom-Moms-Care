@@ -1,0 +1,35 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Upload Report{% endblock %}
+{% block page_title %}Upload Medical Report{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 600px;">
+    <div class="card-header"><i class="fas fa-file-upload me-2"></i>Upload External Lab Report</div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Report Type *</label>{{ form.report_type }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Title *</label>{{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>{{ form.description }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Report File *</label>{{ form.report_file }}
+                <div class="form-text">Accepted: PDF, JPG, PNG</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Report Date *</label>{{ form.report_date }}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-upload me-1"></i> Upload
+                </button>
+                <a href="{% url 'patient_reports' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

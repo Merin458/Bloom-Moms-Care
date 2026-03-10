@@ -1,0 +1,43 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Available Doctors{% endblock %}
+{% block page_title %}Available Doctors{% endblock %}
+{% block content %}
+{% if patient.is_locked %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle me-2"></i>
+    Your profile is locked. Only gynecology doctors are shown.
+</div>
+{% endif %}
+<div class="row g-3">
+{% for doctor in doctors %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-md" style="font-size: 3rem; color: var(--primary);"></i>
+                </div>
+                <h5 class="fw-bold">Dr. {{ doctor.user.get_full_name }}</h5>
+                <p class="text-muted small">{{ doctor.get_specialization_display }}</p>
+                {% if doctor.qualification %}
+                    <p class="small">{{ doctor.qualification }}</p>
+                {% endif %}
+                <p class="small text-muted">{{ doctor.experience_years }} years experience</p>
+                {% if doctor.bio %}
+                    <p class="small text-muted">{{ doctor.bio|truncatechars:100 }}</p>
+                {% endif %}
+                <span class="badge bg-success mb-2">Available</span>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">No available doctors found.</div>
+    </div>
+{% endfor %}
+</div>
+<div class="mt-4">
+    <a href="{% url 'patient_book_appointment' %}" class="btn btn-primary">
+        <i class="fas fa-calendar-plus me-2"></i> Book an Appointment
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Doctor Dashboard{% endblock %}
+{% block page_title %}Doctor Dashboard{% endblock %}
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="text-muted small">My Patients</div>
+                    <div class="fs-2 fw-bold">{{ total_patients }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div>
+                    <div class="text-muted small">Pending Appointments</div>
+                    <div class="fs-2 fw-bold">{{ pending_appointments }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div>
+                    <div class="text-muted small">Accepted Appointments</div>
+                    <div class="fs-2 fw-bold">{{ accepted_appointments }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-calendar me-2"></i>Upcoming Appointments</span>
+                <a href="{% url 'doctor_appointment_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Patient</th><th>Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for appt in recent_appointments %}
+                        <tr>
+                            <td>{{ appt.patient }}</td>
+                            <td>{{ appt.requested_date }}</td>
+                            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-3">No appointments</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-users me-2"></i>My Patients</span>
+                <a href="{% url 'doctor_patient_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Name</th><th>EDD</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for p in recent_patients %}
+                        <tr>
+                            <td><a href="{% url 'doctor_patient_detail' p.pk %}">{{ p }}</a></td>
+                            <td>{{ p.expected_delivery_date|default:"-" }}</td>
+                            <td>{% if p.is_locked %}<span class="locked-badge">Locked</span>{% else %}<span class="badge bg-success">Active</span>{% endif %}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-3">No patients assigned</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
