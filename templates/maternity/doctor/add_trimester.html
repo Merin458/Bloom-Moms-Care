@@ -1,0 +1,41 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Add Trimester Update{% endblock %}
+{% block page_title %}Add Trimester Update for {{ patient }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 700px;">
+    <div class="card-header"><i class="fas fa-baby me-2"></i>Trimester Update</div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Trimester *</label>{{ form.trimester_number }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Date Recorded *</label>{{ form.date_recorded }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Weight (kg)</label>{{ form.weight_kg }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Blood Pressure</label>{{ form.blood_pressure }}
+                    <div class="form-text">e.g. 120/80</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fetal Heartbeat</label>{{ form.fetal_heartbeat }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Health Notes</label>{{ form.health_notes }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Recommendations</label>{{ form.recommendations }}
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Update</button>
+                <a href="{% url 'doctor_patient_detail' patient.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

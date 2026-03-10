@@ -1,0 +1,42 @@
+{% extends 'maternity/base.html' %}
+{% block title %}My Prescriptions{% endblock %}
+{% block page_title %}My Prescriptions{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header"><i class="fas fa-prescription-bottle-alt me-2"></i>Prescriptions from Doctor</div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr><th>#</th><th>Title</th><th>Doctor</th><th>Date</th><th>Medications</th><th>File</th></tr>
+            </thead>
+            <tbody>
+            {% for rx in prescriptions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><strong>{{ rx.title }}</strong></td>
+                    <td>{{ rx.doctor }}</td>
+                    <td>{{ rx.date_prescribed }}</td>
+                    <td>
+                        {{ rx.medications|truncatechars:60 }}
+                        {% if rx.dosage_instructions %}
+                            <br><small class="text-muted">{{ rx.dosage_instructions|truncatechars:60 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rx.prescription_file %}
+                            <a href="{{ rx.prescription_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No prescriptions yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

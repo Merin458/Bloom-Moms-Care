@@ -1,0 +1,44 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Medical Reports{% endblock %}
+{% block page_title %}My Medical Reports{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h5 class="fw-bold mb-0">Medical Reports</h5>
+    <a href="{% url 'patient_upload_report' %}" class="btn btn-primary">
+        <i class="fas fa-upload me-1"></i> Upload Report
+    </a>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr><th>#</th><th>Type</th><th>Title</th><th>Date</th><th>Uploaded By</th><th>File</th></tr>
+            </thead>
+            <tbody>
+            {% for report in reports %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><span class="badge bg-secondary">{{ report.get_report_type_display }}</span></td>
+                    <td>{{ report.title }}</td>
+                    <td>{{ report.report_date }}</td>
+                    <td>
+                        {% if report.uploaded_by == 'admin' %}
+                            <span class="badge bg-info">Hospital</span>
+                        {% else %}
+                            <span class="badge bg-success">Self</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ report.report_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No medical reports found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

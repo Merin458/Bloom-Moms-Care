@@ -1,0 +1,35 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Add Prescription{% endblock %}
+{% block page_title %}Add Prescription for {{ patient }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 700px;">
+    <div class="card-header"><i class="fas fa-prescription-bottle-alt me-2"></i>New Prescription</div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Title *</label>{{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Medications *</label>{{ form.medications }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Dosage Instructions</label>{{ form.dosage_instructions }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Notes</label>{{ form.notes }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Prescription File (optional)</label>{{ form.prescription_file }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Date Prescribed *</label>{{ form.date_prescribed }}
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Prescription</button>
+                <a href="{% url 'doctor_patient_detail' patient.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

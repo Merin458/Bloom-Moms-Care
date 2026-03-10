@@ -1,0 +1,68 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Trimester Updates{% endblock %}
+{% block page_title %}My Trimester Updates{% endblock %}
+{% block content %}
+<div class="row g-4">
+{% for update in updates %}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    <span class="badge bg-info me-2">T{{ update.trimester_number }}</span>
+                    {{ update.get_trimester_number_display }}
+                </span>
+                <small class="text-muted">{{ update.date_recorded }}</small>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-2"><i class="fas fa-user-md me-1"></i>{{ update.doctor }}</p>
+                <div class="row g-2 mb-3">
+                    {% if update.weight_kg %}
+                    <div class="col-6">
+                        <div class="bg-light rounded p-2 text-center">
+                            <div class="text-muted small">Weight</div>
+                            <div class="fw-bold">{{ update.weight_kg }} kg</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if update.blood_pressure %}
+                    <div class="col-6">
+                        <div class="bg-light rounded p-2 text-center">
+                            <div class="text-muted small">Blood Pressure</div>
+                            <div class="fw-bold">{{ update.blood_pressure }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if update.fetal_heartbeat %}
+                    <div class="col-6">
+                        <div class="bg-light rounded p-2 text-center">
+                            <div class="text-muted small">Fetal Heartbeat</div>
+                            <div class="fw-bold">{{ update.fetal_heartbeat }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if update.health_notes %}
+                <div class="mb-2">
+                    <p class="fw-semibold mb-1 small">Health Notes</p>
+                    <p class="text-muted small">{{ update.health_notes }}</p>
+                </div>
+                {% endif %}
+                {% if update.recommendations %}
+                <div>
+                    <p class="fw-semibold mb-1 small">Recommendations</p>
+                    <p class="text-muted small">{{ update.recommendations }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center py-4">
+            <i class="fas fa-baby fa-2x mb-2 d-block"></i>
+            No trimester updates available yet. Your doctor will add updates during checkups.
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

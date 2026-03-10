@@ -1,0 +1,140 @@
+{% extends 'maternity/base.html' %}
+{% block title %}Patient Dashboard{% endblock %}
+{% block page_title %}My Dashboard{% endblock %}
+{% block content %}
+{% if patient.is_locked %}
+<div class="alert alert-warning">
+    <i class="fas fa-lock me-2"></i>
+    Your profile is <strong>locked</strong> (6 months post-delivery). You can still book appointments with gynecology doctors.
+</div>
+{% endif %}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div>
+                    <div class="text-muted small">Pending Appointments</div>
+                    <div class="fs-2 fw-bold">{{ pending_appointments }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div>
+                    <div class="text-muted small">Accepted Appointments</div>
+                    <div class="fs-2 fw-bold">{{ accepted_appointments }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                <div>
+                    <div class="text-muted small">My Doctor</div>
+                    <div class="fs-6 fw-bold">{{ patient.assigned_doctor|default:"Not assigned" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-user me-2"></i>My Profile</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-5">Name</dt><dd class="col-7">{{ patient }}</dd>
+                    <dt class="col-5">Blood Group</dt><dd class="col-7">{{ patient.get_blood_group_display }}</dd>
+                    <dt class="col-5">Age</dt><dd class="col-7">{{ patient.age|default:"-" }}</dd>
+                    <dt class="col-5">EDD</dt><dd class="col-7">{{ patient.expected_delivery_date|default:"-" }}</dd>
+                    <dt class="col-5">Doctor</dt><dd class="col-7">{{ patient.assigned_doctor|default:"-" }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <!-- Recent Appointments -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-calendar me-2"></i>Recent Appointments</span>
+                <a href="{% url 'patient_book_appointment' %}" class="btn btn-sm btn-primary">+ Book</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Doctor</th><th>Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for appt in recent_appointments %}
+                        <tr>
+                            <td>{{ appt.doctor }}</td>
+                            <td>{{ appt.requested_date }}</td>
+                            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-2">No appointments yet</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-prescription-bottle-alt me-2"></i>Recent Prescriptions</span>
+                <a href="{% url 'patient_prescriptions' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Title</th><th>Doctor</th><th>Date</th></tr></thead>
+                    <tbody>
+                    {% for rx in recent_prescriptions %}
+                        <tr>
+                            <td>{{ rx.title }}</td>
+                            <td>{{ rx.doctor }}</td>
+                            <td>{{ rx.date_prescribed }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-2">No prescriptions</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-baby me-2"></i>Trimester Updates</span>
+                <a href="{% url 'patient_trimester_updates' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>Trimester</th><th>Date</th><th>Notes</th></tr></thead>
+                    <tbody>
+                    {% for t in trimester_updates %}
+                        <tr>
+                            <td><span class="badge bg-info">T{{ t.trimester_number }}</span></td>
+                            <td>{{ t.date_recorded }}</td>
+                            <td>{{ t.health_notes|truncatechars:40 }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-2">No updates</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
