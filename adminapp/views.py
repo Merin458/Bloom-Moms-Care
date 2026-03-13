@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django import forms
 from django.contrib import messages
+import re
 from notificationapp.models import Notification
 from patientapp.models import tbl_appointment
 from .models import *
@@ -343,19 +344,68 @@ def editdoctor(request, id):
     doc = tbl_doctor.objects.get(doctor_id=id)
     
     if request.method == 'POST':
-        doctor_name = request.POST.get('doctorname')
-        email= request.POST.get('email')
-        specialization= request.POST.get('specialization')
-        experience= request.POST.get('experience')
-        phone= request.POST.get('contact')
-        hospital_timimg= request.POST.get('timing')
-        status = request.POST.get('status')
-        password = request.POST.get('pw')
+        doctor_name = (request.POST.get('doctorname') or '').strip()
+        email = (request.POST.get('email') or '').strip()
+        specialization = (request.POST.get('specialization') or '').strip()
+        experience = (request.POST.get('experience') or '').strip()
+        phone = (request.POST.get('contact') or '').strip()
+        hospital_timimg = (request.POST.get('timing') or '').strip()
+        status = (request.POST.get('status') or '').strip().lower()
+        password = (request.POST.get('pw') or '').strip()
+
+        # Basic required-field validation
+        if not doctor_name or not email or not specialization or not experience or not phone or not hospital_timimg:
+            messages.error(request, 'Please fill all required fields.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if not re.fullmatch(r"[A-Za-z .'-]{2,100}", doctor_name):
+            messages.error(request, 'Doctor name should contain only letters and valid separators.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+            messages.error(request, 'Please enter a valid email address.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        email_in_use = tbl_doctor.objects.filter(email__iexact=email).exclude(doctor_id=id).exists()
+        if email_in_use:
+            messages.error(request, 'This email is already used by another doctor.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if not experience.isdigit():
+            messages.error(request, 'Experience must be a number.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        experience_val = int(experience)
+        if experience_val < 0 or experience_val > 60:
+            messages.error(request, 'Experience must be between 0 and 60 years.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        # Accept exactly 10 digits for phone
+        if not re.fullmatch(r"\d{10}", phone):
+            messages.error(request, 'Contact number must be exactly 10 digits.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if status not in ['active', 'inactive']:
+            messages.error(request, 'Status must be either active or inactive.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if password and len(password) < 6:
+            messages.error(request, 'Password must be at least 6 characters long.')
+            return render(request, 'Admin/editdoctor.html', {'doc': doc})
+
+        if 'dimage' in request.FILES:
+            image_file = request.FILES['dimage']
+            if image_file.content_type and not image_file.content_type.startswith('image/'):
+                messages.error(request, 'Uploaded file must be an image.')
+                return render(request, 'Admin/editdoctor.html', {'doc': doc})
+            if image_file.size > 5 * 1024 * 1024:
+                messages.error(request, 'Image size must be 5MB or less.')
+                return render(request, 'Admin/editdoctor.html', {'doc': doc})
 
         doc.doctor_name = doctor_name
         doc.email = email
         doc.specialization = specialization
-        doc.experience = experience
+        doc.experience = experience_val
         doc.phone = phone
         doc.hospital_timimg = hospital_timimg
         doc.status = status
@@ -686,21 +736,65 @@ def doctorleave(request):
     from .models import tbl_doctor, tbl_doctor_leave
     from patientapp.models import tbl_appointment
     doctors = tbl_doctor.objects.filter(status='active')
+    today = date.today()
+    max_leave_date = today + timedelta(days=365)
 
     if request.method == 'POST':
         doctor_id = request.POST.get('doctor')
         leave_date = request.POST.get('leave_date')
-        reason = request.POST.get('reason')
+        reason = (request.POST.get('reason') or '').strip()
+
+        if not doctor_id or not leave_date or not reason:
+            messages.error(request, 'Please fill all fields.')
+            return render(request, 'Admin/docleave.html', {
+                'doctors': doctors,
+                'today': today,
+                'max_leave_date': max_leave_date
+            })
+
+        try:
+            leave_date_obj = date.fromisoformat(leave_date)
+        except ValueError:
+            messages.error(request, 'Please select a valid leave date.')
+            return render(request, 'Admin/docleave.html', {
+                'doctors': doctors,
+                'today': today,
+                'max_leave_date': max_leave_date
+            })
+
+        if leave_date_obj.year < today.year:
+            messages.error(request, 'Year cannot be less than the current year.')
+            return render(request, 'Admin/docleave.html', {
+                'doctors': doctors,
+                'today': today,
+                'max_leave_date': max_leave_date
+            })
+
+        if leave_date_obj < today:
+            messages.error(request, 'Previous dates cannot be selected for doctor leave.')
+            return render(request, 'Admin/docleave.html', {
+                'doctors': doctors,
+                'today': today,
+                'max_leave_date': max_leave_date
+            })
+
+        if leave_date_obj > max_leave_date:
+            messages.error(request, 'Leave date cannot be more than one year ahead.')
+            return render(request, 'Admin/docleave.html', {
+                'doctors': doctors,
+                'today': today,
+                'max_leave_date': max_leave_date
+            })
 
         tbl_doctor_leave.objects.create(
             doctor_id=doctor_id,
-            leave_date=leave_date,
+            leave_date=leave_date_obj,
             reason=reason
         )
 
         appointments = tbl_appointment.objects.filter(
             doctor_id=doctor_id,
-            appointment_date=leave_date,
+            appointment_date=leave_date_obj,
             status__in=['Accepted', 'Rescheduled']
         )
 
@@ -709,11 +803,13 @@ def doctorleave(request):
             app.admin_note = "Doctor is on leave"
             app.save()
 
-        messages.success(request, f'Doctor leave recorded successfully for {leave_date}!')
+        messages.success(request, f'Doctor leave recorded successfully for {leave_date_obj}!')
         return redirect('adminapp:viewdoctorleave')
 
     return render(request, 'Admin/docleave.html', {
-        'doctors': doctors
+        'doctors': doctors,
+        'today': today,
+        'max_leave_date': max_leave_date
     })
 
 

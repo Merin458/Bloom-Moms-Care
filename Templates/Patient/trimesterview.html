@@ -36,6 +36,14 @@
         </h5>
         <small class="mb-0">Focus on recovery and healing during this time</small>
     </div>
+    {% elif patient_status == 'Delivered' %}
+    <div class="bg-info text-dark p-3 rounded mb-3 text-center" style="background-color: #bfe8f7 !important;">
+        <h5 class="fw-bold mb-1">
+            <i class="fas fa-baby me-2"></i>
+            Delivery Status
+        </h5>
+        <small class="mb-0">Trimester tracking is no longer required after delivery</small>
+    </div>
     {% else %}
     <div class="bg-primary text-white p-3 rounded mb-3 text-center">
         <h5 class="fw-bold mb-1">
@@ -99,6 +107,30 @@
                     <div class="alert alert-secondary mt-4 mb-0" style="background-color: #f5f5f5; border: 1px solid #ddd;">
                         <i class="fas fa-phone me-2"></i>
                         <strong>Need Support?</strong> Contact your doctor at any time for assistance.
+                    </div>
+                </div>
+
+            {% elif patient_status == 'Delivered' %}
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👶</div>
+                    <h4 class="fw-bold mb-3" style="color: #0c7489;">Delivered</h4>
+
+                    <p class="mb-4" style="font-size: 1.1rem; color: #666;">
+                        Your delivery has been recorded successfully. Trimester tracking is now closed for your profile.
+                    </p>
+
+                    <div class="bg-light p-4 rounded mb-4" style="border-left: 5px solid #0dcaf0;">
+                        <p style="margin-bottom: 0.5rem; color: #555;">
+                            <strong>You can continue to view your records and account information.</strong>
+                        </p>
+                        <p style="margin: 0; color: #777;">
+                            Payment and unlock options remain available if your profile has been locked after the delivery grace period.
+                        </p>
+                    </div>
+
+                    <div class="alert alert-info mt-4 mb-0" style="background-color: #e9f9fd; border: 1px solid #7dd3e8; color: #0c5460;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Status:</strong> Delivered
                     </div>
                 </div>
 

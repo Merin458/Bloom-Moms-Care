@@ -343,6 +343,8 @@
 
 <body>
 
+{% include 'Guest/messages.html' %}
+
 <div class="main-container">
 
     <!-- LEFT IMAGE SIDE -->
@@ -374,19 +376,6 @@
 
             <div class="subtitle"><i class="fas fa-shield-halved"></i> Secure login for Admin, Doctor & Patient</div>
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {% if message.tags == 'success' %}
-                            <i class="fas fa-check-circle"></i>
-                        {% else %}
-                            <i class="fas fa-exclamation-circle"></i>
-                        {% endif %}
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
             <form method="POST">
                 {% csrf_token %}
 
@@ -404,6 +393,11 @@
                         <i class="fas fa-key input-icon"></i>
                         <input type="password" name="password" id="passwordField" placeholder="Enter your password" required>
                         <i class="fas fa-eye password-toggle" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <a href="{% url 'guestapp:forgot_password' %}" style="font-size: 13px; color: #ff6f61; text-decoration: none; font-weight: 600;">
+                            Forgot password?
+                        </a>
                     </div>
                 </div>
 

@@ -240,6 +240,8 @@
                 <span class="badge-trimester">
                     {% if patient.status == 'Miscarriage' %}
                     Status: Miscarriage
+                    {% elif patient.status == 'Delivered' %}
+                    Status: Delivered
                     {% elif patient.status == 'Transferred' %}
                     Status: Transferred
                     {% else %}

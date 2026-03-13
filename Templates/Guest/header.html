@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Plasery - Plastic Surgery Website Template</title>
+    <title> Bloom Moms Care - Maternity Care System </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -75,7 +75,7 @@
             </div>
             <div class="col-lg-4 text-center bg-white border-inner py-3">
                 <div class="d-inline-flex align-items-center justify-content-center">
-                    <a href="index.html" class="navbar-brand">
+                    
                         <h1 class="m-0 text-primary"><i class="fa fa-hospital fs-1 me-3"></i>Bloom Moms Care</h1>
                     </a>
                 </div>
@@ -105,13 +105,47 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mx-auto bg-light py-3 py-lg-0 px-3">
-                <a href="{% url 'guestapp:guestindex' %}" class="nav-item nav-link active">Home</a>
-                <a href="{% url 'guestapp:about_us' %}" class="nav-item nav-link">About Us</a>
-                <a href="{% url 'guestapp:guestindex' %}#services" class="nav-item nav-link">Our Services</a>
+                                <a href="{% url 'guestapp:guestindex' %}" id="nav-home" class="nav-item nav-link {% if request.resolver_match.url_name == 'guestindex' %}active{% endif %}">Home</a>
+                                <a href="{% url 'guestapp:about_us' %}" id="nav-about" class="nav-item nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}">About Us</a>
+                                <a href="{% url 'guestapp:guestindex' %}#services" id="nav-services" class="nav-item nav-link">Our Services</a>
                 
-                <a href="{% url 'guestapp:contact' %}" class="nav-item nav-link">Contact Us</a>
+                                <a href="{% url 'guestapp:contact' %}" id="nav-contact" class="nav-item nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact Us</a>
             </div>
         </div>
         <div class="d-none d-lg-block w-25 text-end"></div>
     </nav>
     <!-- Navbar End -->
+
+    {% include 'Guest/messages.html' %}
+
+        <script>
+            (function () {
+                var homeLink = document.getElementById('nav-home');
+                var servicesLink = document.getElementById('nav-services');
+                if (!homeLink || !servicesLink) {
+                    return;
+                }
+
+                function updateGuestNavActive() {
+                    var path = window.location.pathname;
+                    var hash = (window.location.hash || '').toLowerCase();
+                    var isHomePath = homeLink.pathname === path;
+
+                    // Reset only links whose active state depends on home hash.
+                    homeLink.classList.remove('active');
+                    servicesLink.classList.remove('active');
+
+                    if (isHomePath && hash === '#services') {
+                        servicesLink.classList.add('active');
+                        return;
+                    }
+
+                    if (isHomePath) {
+                        homeLink.classList.add('active');
+                    }
+                }
+
+                updateGuestNavActive();
+                window.addEventListener('hashchange', updateGuestNavActive);
+            })();
+        </script>

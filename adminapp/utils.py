@@ -38,6 +38,9 @@ def calculate_trimester(last_cycle_date):
 
 
 def update_trimester_and_notify(patient):
+    if not can_update_trimester(patient):
+        return patient.current_trimester
+
     if not patient.last_cycle_date:
         return patient.current_trimester  
 

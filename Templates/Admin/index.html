@@ -28,11 +28,82 @@
                   <a href="{% url 'adminapp:export_patient_report' %}" class="btn btn-sm btn-primary ml-2">
                     Download Patient Report
                   </a>
-                  <a href="{% url 'adminapp:admin_logout' %}" class="btn btn-sm btn-danger ml-2" onclick="return confirm('Are You Sure You Want to Logout?');">
+                  <a href="{% url 'adminapp:admin_logout' %}" class="btn btn-sm btn-danger ml-2 js-logout-confirm">
                     <i class="mdi mdi-power"></i> Logout
                   </a>
                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .bm-modal-overlay {
+              position: fixed;
+              inset: 0;
+              background: rgba(18, 22, 33, 0.55);
+              display: none;
+              align-items: center;
+              justify-content: center;
+              z-index: 20000;
+              padding: 16px;
+            }
+            .bm-modal-overlay.show {
+              display: flex;
+            }
+            .bm-modal {
+              width: 100%;
+              max-width: 420px;
+              background: #fff;
+              border-radius: 16px;
+              box-shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
+              overflow: hidden;
+              animation: bmModalIn 0.18s ease-out;
+            }
+            .bm-modal-head {
+              padding: 16px 18px;
+              background: linear-gradient(135deg, #f97316, #ea580c);
+              color: #fff;
+              font-weight: 700;
+            }
+            .bm-modal-body {
+              padding: 18px;
+              color: #334155;
+            }
+            .bm-modal-actions {
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              padding: 0 18px 18px;
+            }
+            .bm-btn {
+              border: 0;
+              border-radius: 10px;
+              padding: 9px 14px;
+              font-weight: 600;
+              cursor: pointer;
+            }
+            .bm-btn-cancel {
+              background: #e2e8f0;
+              color: #0f172a;
+            }
+            .bm-btn-confirm {
+              background: #dc2626;
+              color: #fff;
+            }
+            @keyframes bmModalIn {
+              from { transform: translateY(8px); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+          </style>
+
+          <div id="logoutConfirmModal" class="bm-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="logoutConfirmTitle">
+            <div class="bm-modal">
+              <div class="bm-modal-head" id="logoutConfirmTitle">Confirm Logout</div>
+              <div class="bm-modal-body">Are you sure you want to logout?</div>
+              <div class="bm-modal-actions">
+                <button type="button" id="logoutCancelBtn" class="bm-btn bm-btn-cancel">Cancel</button>
+                <button type="button" id="logoutConfirmBtn" class="bm-btn bm-btn-confirm">Logout</button>
               </div>
             </div>
           </div>
@@ -245,7 +316,7 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        
+        {% include 'Admin/footer.html' %}
         <!-- partial -->
       </div>
       <!-- main-panel ends -->
@@ -254,9 +325,6 @@
   </div>
   <!-- container-scroller -->
 
-  <!-- plugins:js -->
-  <script src="{% static 'Admin/vendors/js/vendor.bundle.base.js' %}"></script>
-  <!-- endinject -->
   <!-- Plugin js for this page -->
   <script src="{% static 'Admin/vendors/chart.js/Chart.min.js' %}"></script>
   <script src="{% static 'Admin/vendors/datatables.net/jquery.dataTables.js' %}"></script>
@@ -264,20 +332,77 @@
   <script src="{% static 'Admin/js/dataTables.select.min.js' %}"></script>
 
   <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="{% static 'Admin/js/off-canvas.js' %}"></script>
-  <script src="{% static 'Admin/js/hoverable-collapse.js' %}"></script>
-  <script src="{% static 'Admin/js/template.js' %}"></script>
-  <script src="{% static 'Admin/js/settings.js' %}"></script>
-  <script src="{% static 'Admin/js/todolist.js' %}"></script>
-  <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="{% static 'Admin/js/dashboard.js' %}"></script>
   <script src="{% static 'Admin/js/Chart.roundedBarCharts.js' %}"></script>
   <!-- End custom js for this page-->
+  <script>
+    (function () {
+      var modal = document.getElementById('logoutConfirmModal');
+      var cancelBtn = document.getElementById('logoutCancelBtn');
+      var confirmBtn = document.getElementById('logoutConfirmBtn');
+      var logoutHref = '';
+
+      if (!modal || !cancelBtn || !confirmBtn) {
+        return;
+      }
+
+      function findLogoutLink(target) {
+        if (!target) {
+          return null;
+        }
+        return target.closest('a.js-logout-confirm, a[href*="/logout/"]');
+      }
+
+      // Remove any legacy inline confirm handlers if they exist in cached/old markup.
+      document.querySelectorAll('a.js-logout-confirm, a[href*="/logout/"]').forEach(function (link) {
+        link.removeAttribute('onclick');
+      });
+
+      function closeModal() {
+        modal.classList.remove('show');
+      }
+
+      // Capture phase ensures browser confirm dialogs from inline handlers never run.
+      document.addEventListener('click', function (event) {
+        var logoutLink = findLogoutLink(event.target);
+        if (!logoutLink) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) {
+          event.stopImmediatePropagation();
+        }
+
+        logoutHref = logoutLink.getAttribute('href') || '';
+        modal.classList.add('show');
+      }, true);
+
+      cancelBtn.addEventListener('click', closeModal);
+
+      confirmBtn.addEventListener('click', function () {
+        if (logoutHref) {
+          window.location.href = logoutHref;
+        }
+      });
+
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && modal.classList.contains('show')) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>
-{% include 'Admin/footer.html' %}
 
 

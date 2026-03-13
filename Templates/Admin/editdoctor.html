@@ -1,79 +1,124 @@
 {% load static %}
 {% include 'Admin/header.html' %}
-<div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Edit Doctors Details</h4>
-                  <p class="card-description">
-                    Doctor Editing
-                  </p>
-                  <form class="forms-sample" action="{% url 'adminapp:editdoctor' id=doc.doctor_id %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Doctor Name</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Name" name="doctorname" value="{{doc.doctor_name}}">
-                      </div>
-                    </div>
+<div class="main-panel">
+  <div class="content-wrapper">
+    {% include 'Admin/messages.html' %}
+    <div class="row justify-content-center">
+      <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Edit Doctor Details</h4>
+            <p class="card-description">Update doctor profile information</p>
 
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Email</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Email" name="email" value="{{doc.email}}">
-                      </div>
-                    </div>
+            <form id="editDoctorForm" class="forms-sample needs-validation" action="{% url 'adminapp:editdoctor' id=doc.doctor_id %}" method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
 
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Specialization</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Specialization" name="specialization" value="{{doc.specialization}}">
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Experience</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Experience" name="experience" value="{{doc.experience}}">
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Contact Number</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Contact Number" name="contact" value="{{doc.phone}}">
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Hospital Timing</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Hospital Timing" name="timing" value="{{doc.hospital_timimg}}">
-                      </div>
-                      </div>
-
-                      <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Image</label>
-                      <div class="col-sm-9">
-                        <input type="file" class="form-control" id="exampleInputUsername2" placeholder="Photo" name="dimage">   
-                        </div>
-                    </div>
-
-                      <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Status</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Status" name="status" value="{{doc.status}}">   
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Password</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Password" name="pw" value="{{doc.password}}">
-                      </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <a href="{% url 'adminapp:viewdoctors' %}" class="btn btn-light">Cancel</a>
-                  </form>
+              <div class="form-group row">
+                <label for="doctorname" class="col-sm-3 col-form-label">Doctor Name</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="doctorname" placeholder="Name" name="doctorname" value="{{ doc.doctor_name }}" required pattern="[A-Za-z .'-]{2,100}" maxlength="100">
+                  <div class="invalid-feedback">Enter a valid doctor name (letters only).</div>
                 </div>
-                {% include 'Admin/footer.html' %}
+              </div>
+
+              <div class="form-group row">
+                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{ doc.email }}" required maxlength="100">
+                  <div class="invalid-feedback">Enter a valid email address.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="specialization" class="col-sm-3 col-form-label">Specialization</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="specialization" placeholder="Specialization" name="specialization" value="{{ doc.specialization }}" required maxlength="100">
+                  <div class="invalid-feedback">Specialization is required.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="experience" class="col-sm-3 col-form-label">Experience (Years)</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" id="experience" placeholder="Experience" name="experience" value="{{ doc.experience }}" required min="0" max="60" step="1">
+                  <div class="invalid-feedback">Experience must be between 0 and 60.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="contact" class="col-sm-3 col-form-label">Contact Number</label>
+                <div class="col-sm-9">
+                  <input type="tel" class="form-control" id="contact" placeholder="10-digit mobile number" name="contact" value="{{ doc.phone }}" required pattern="\d{10}" minlength="10" maxlength="10" inputmode="numeric">
+                  <div class="invalid-feedback">Contact number must be exactly 10 digits.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="timing" class="col-sm-3 col-form-label">Hospital Timing</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="timing" placeholder="Hospital Timing" name="timing" value="{{ doc.hospital_timimg }}" required maxlength="100">
+                  <div class="invalid-feedback">Hospital timing is required.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="dimage" class="col-sm-3 col-form-label">Image</label>
+                <div class="col-sm-9">
+                  <input type="file" class="form-control" id="dimage" name="dimage" accept="image/*">
+                  <small class="form-text text-muted">Optional. Upload only image files (max 5MB).</small>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="status" class="col-sm-3 col-form-label">Status</label>
+                <div class="col-sm-9">
+                  <select class="form-control" id="status" name="status" required>
+                    <option value="">Select status</option>
+                    <option value="active" {% if doc.status|lower == 'active' %}selected{% endif %}>Active</option>
+                    <option value="inactive" {% if doc.status|lower == 'inactive' %}selected{% endif %}>Inactive</option>
+                  </select>
+                  <div class="invalid-feedback">Please choose a valid status.</div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="pw" class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" id="pw" placeholder="Leave blank to keep current password" name="pw" minlength="6" autocomplete="new-password">
+                  <small class="form-text text-muted">Optional. Minimum 6 characters if changing.</small>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary mr-2">Submit</button>
+              <a href="{% url 'adminapp:viewdoctors' %}" class="btn btn-light">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        'use strict';
+        var form = document.getElementById('editDoctorForm');
+        if (!form) return;
+
+        form.addEventListener('submit', function (event) {
+          var contactInput = document.getElementById('contact');
+          if (contactInput) {
+            contactInput.value = (contactInput.value || '').replace(/\D/g, '');
+          }
+
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add('was-validated');
+        }, false);
+      })();
+    </script>
+  </div>
+
+  {% include 'Admin/footer.html' %}
+</div>

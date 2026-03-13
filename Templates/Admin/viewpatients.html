@@ -64,7 +64,7 @@
                     <td>{{ p.address }}</td>
                     <td>{{ p.blood_group }}</td>
                     <td>{{ p.last_cycle_date }}</td>
-                    <td>{{ p.current_trimester }}</td>
+                    <td>{% if p.status == 'Delivered' %}Delivered{% else %}{{ p.current_trimester }}{% endif %}</td>
                     <td>{{ p.edd_date }}</td>
                     <td>{% if p.delivery_date %}
                         {{ p.delivery_date }}

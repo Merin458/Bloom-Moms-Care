@@ -45,9 +45,13 @@
                                 <div class="form-group">
                                     <label>Leave Date</label>
                                     <input type="date"
+                                         id="leave_date"
                                            class="form-control"
                                            name="leave_date"
+                                           min="{{ today|date:'Y-m-d' }}"
+                                         max="{{ max_leave_date|date:'Y-m-d' }}"
                                            required>
+                                     <small class="form-text text-muted">Only dates from today up to one year ahead are allowed.</small>
                                 </div>
                             </div>
 
@@ -83,6 +87,63 @@
             </div>
         </div>
     </div>
+
+        <script>
+            (function () {
+                var leaveDateInput = document.getElementById('leave_date');
+                if (!leaveDateInput) {
+                    return;
+                }
+
+                var today = new Date();
+                var currentYear = today.getFullYear();
+                var minDate = leaveDateInput.getAttribute('min');
+                var maxDate = leaveDateInput.getAttribute('max');
+
+                function validateLeaveDate() {
+                    var value = leaveDateInput.value;
+                    leaveDateInput.setCustomValidity('');
+
+                    if (!value) {
+                        return;
+                    }
+
+                    var parts = value.split('-');
+                    if (parts.length !== 3) {
+                        leaveDateInput.setCustomValidity('Please enter a valid date.');
+                        return;
+                    }
+
+                    var yearPart = parts[0].replace(/\D/g, '').slice(0, 4);
+                    if (parts[0] !== yearPart) {
+                        leaveDateInput.value = [yearPart, parts[1], parts[2]].join('-');
+                    }
+
+                    if (yearPart.length > 4) {
+                        leaveDateInput.setCustomValidity('Year must be 4 digits only.');
+                        return;
+                    }
+
+                    if (yearPart.length === 4 && Number(yearPart) < currentYear) {
+                        leaveDateInput.setCustomValidity('Year cannot be less than the current year.');
+                        return;
+                    }
+
+                    if (minDate && leaveDateInput.value < minDate) {
+                        leaveDateInput.setCustomValidity('Previous dates cannot be selected.');
+                        return;
+                    }
+
+                    if (maxDate && leaveDateInput.value > maxDate) {
+                        leaveDateInput.setCustomValidity('Leave date cannot be more than one year ahead.');
+                    }
+                }
+
+                leaveDateInput.addEventListener('input', validateLeaveDate);
+                leaveDateInput.addEventListener('change', validateLeaveDate);
+                leaveDateInput.addEventListener('blur', validateLeaveDate);
+            })();
+        </script>
     
     {% include 'Admin/footer.html' %}
 </div>

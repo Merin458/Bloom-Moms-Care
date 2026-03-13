@@ -274,7 +274,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-logout" href="{% url 'doctorapp:doctor_logout' %}" onclick="return confirm('Are you sure you want to logout?');">
+                                                <a class="btn btn-logout js-logout-confirm" href="{% url 'doctorapp:doctor_logout' %}">
                             <i class="fas fa-sign-out-alt me-1"></i>Logout
                         </a>
                     </li>
@@ -282,6 +282,55 @@
             </div>
         </div>
     </nav>
+
+        <style>
+            .bm-modal-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(18, 22, 33, 0.55);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 20000;
+                padding: 16px;
+            }
+            .bm-modal-overlay.show { display: flex; }
+            .bm-modal { width: 100%; max-width: 420px; background: #fff; border-radius: 16px; box-shadow: 0 20px 45px rgba(0,0,0,0.28); overflow: hidden; }
+            .bm-modal-head { padding: 16px 18px; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-weight: 700; }
+            .bm-modal-body { padding: 18px; color: #334155; }
+            .bm-modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 0 18px 18px; }
+            .bm-btn { border: 0; border-radius: 10px; padding: 9px 14px; font-weight: 600; cursor: pointer; }
+            .bm-btn-cancel { background: #e2e8f0; color: #0f172a; }
+            .bm-btn-confirm { background: #dc2626; color: #fff; }
+        </style>
+
+        <div id="logoutConfirmModal" class="bm-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="logoutConfirmTitle">
+            <div class="bm-modal">
+                <div class="bm-modal-head" id="logoutConfirmTitle">Confirm Logout</div>
+                <div class="bm-modal-body">Are you sure you want to logout?</div>
+                <div class="bm-modal-actions">
+                    <button type="button" id="logoutCancelBtn" class="bm-btn bm-btn-cancel">Cancel</button>
+                    <button type="button" id="logoutConfirmBtn" class="bm-btn bm-btn-confirm">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                var logoutLink = document.querySelector('.js-logout-confirm');
+                var modal = document.getElementById('logoutConfirmModal');
+                var cancelBtn = document.getElementById('logoutCancelBtn');
+                var confirmBtn = document.getElementById('logoutConfirmBtn');
+                var logoutHref = '';
+                if (!logoutLink || !modal || !cancelBtn || !confirmBtn) return;
+                function closeModal() { modal.classList.remove('show'); }
+                logoutLink.addEventListener('click', function (event) { event.preventDefault(); logoutHref = logoutLink.getAttribute('href'); modal.classList.add('show'); });
+                cancelBtn.addEventListener('click', closeModal);
+                confirmBtn.addEventListener('click', function () { if (logoutHref) window.location.href = logoutHref; });
+                modal.addEventListener('click', function (event) { if (event.target === modal) closeModal(); });
+                document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && modal.classList.contains('show')) closeModal(); });
+            })();
+        </script>
 
     {% include 'Doctor/messages.html' %}
 
@@ -321,7 +370,7 @@
                     </div>
                     <div class="info-item">
                         <i class="fas fa-pregnancy-woman"></i>
-                        <span><strong>Trimester:</strong> {{ patient.current_trimester|default:"N/A" }}</span>
+                        <span><strong>Trimester:</strong> {% if patient.status == 'Delivered' %}Delivered{% else %}{{ patient.current_trimester|default:"N/A" }}{% endif %}</span>
                     </div>
                     <div class="info-item">
                         <i class="fas fa-heartbeat"></i>

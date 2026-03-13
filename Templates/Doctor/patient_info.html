@@ -223,7 +223,9 @@
                     <h2>{{ patient.patient_name }}</h2>
                     <p><i class="fas fa-phone me-2"></i><strong>Contact:</strong> {{ patient.phone|default:"Not provided" }}</p>
                     <p><i class="fas fa-pregnancy-woman me-2"></i><strong>Trimester:</strong> 
-                        {% if patient.current_trimester %}
+                        {% if patient.status == 'Delivered' %}
+                            Delivered
+                        {% elif patient.current_trimester %}
                             Trimester {{ patient.current_trimester }}
                         {% else %}
                             Not specified
@@ -283,7 +285,9 @@
                 <div class="info-field">
                     <label>Current Trimester</label>
                     <value>
-                        {% if patient.current_trimester %}
+                        {% if patient.status == 'Delivered' %}
+                            <span class="badge bg-info text-dark">Delivered</span>
+                        {% elif patient.current_trimester %}
                             <span class="badge bg-primary">Trimester {{ patient.current_trimester }}</span>
                         {% else %}
                             Not specified

@@ -50,7 +50,7 @@ body {
             <p><strong>Name:</strong> {{ patient.patient_name }}</p>
             <p><strong>Phone:</strong> {{ patient.phone }}</p>
             <p><strong>Age:</strong> {{ patient.age }}</p>
-            <p><strong>Status:</strong> {{ patient.status }}</p>
+            <p><strong>Status:</strong> {% if patient.status|lower == 'active' %}Active{% else %}{{ patient.status }}{% endif %}</p>
 
             {% if patient.status == 'Delivered' %}
                 <p class="mb-0 text-success">
